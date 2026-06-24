@@ -3,6 +3,7 @@ from __future__ import annotations
 import gc
 import logging
 import os
+import re
 from importlib.metadata import version
 from importlib.util import find_spec
 from multiprocessing import Process, Queue
@@ -155,6 +156,7 @@ class VLLM(TemplateLM):
         chat_template_args: dict | None = None,
         # End marker for thinking tags - splits to get response after this token (if provided).
         think_end_token: str | None = None,
+        log_completion_metadata: bool = False,
         max_lora_rank: int = 16,
         truncation_side: Literal["left", "right", "middle"] = "left",
         **kwargs,
@@ -172,6 +174,7 @@ class VLLM(TemplateLM):
         )
         kwargs.pop("device", None)
         self.think_end_token = think_end_token
+        self.log_completion_metadata = log_completion_metadata
         self.V1 = os.environ.get("VLLM_USE_V1", "1") != "0"
         self._max_length = max_model_len if max_model_len is not None else max_length
         self.tensor_parallel_size = int(tensor_parallel_size)
@@ -624,11 +627,90 @@ class VLLM(TemplateLM):
 
         return loglikelihoods
 
+    @staticmethod
+    def _find_last_subsequence(sequence: list[int], subsequence: list[int]) -> int | None:
+        if not subsequence or len(subsequence) > len(sequence):
+            return None
+
+        for idx in range(len(sequence) - len(subsequence), -1, -1):
+            if sequence[idx : idx + len(subsequence)] == subsequence:
+                return idx
+        return None
+
+    def _encode_metadata_text(self, text: str) -> list[int]:
+        if not text:
+            return []
+
+        try:
+            token_ids = self.tokenizer(
+                text, add_special_tokens=False, return_attention_mask=False
+            ).input_ids
+        except TypeError:
+            token_ids = self.tokenizer(text, add_special_tokens=False).input_ids
+
+        if token_ids and isinstance(token_ids[0], list):
+            token_ids = token_ids[0]
+        return list(token_ids)
+
+    def _get_completion_metadata(self, completion: Any) -> dict[str, Any]:
+        raw_text = completion.text
+        token_ids = getattr(completion, "token_ids", None) or []
+        is_thinking_mode = self.enable_thinking or self.think_end_token is not None
+
+        base_metadata = {
+            "finish_reason": getattr(completion, "finish_reason", None),
+            "stop_reason": getattr(completion, "stop_reason", None),
+            "generated_token_count": len(token_ids),
+            "word_count": len(raw_text.split()),
+        }
+
+        if not is_thinking_mode:
+            return base_metadata | {"answer_before_post_processing": raw_text}
+
+        think_end_match = None
+        reasoning = raw_text
+        answer = ""
+        reasoning_token_count = len(token_ids)
+        answer_token_count = 0
+
+        matches = list(re.finditer(self.think_end_token, raw_text))
+        if matches:
+            think_end_match = matches[-1]
+            reasoning = raw_text[: think_end_match.start()]
+            answer = raw_text[think_end_match.end() :].lstrip()
+
+            delimiter_token_ids = self._encode_metadata_text(think_end_match.group(0))
+            delimiter_start = self._find_last_subsequence(
+                list(token_ids), delimiter_token_ids
+            )
+            if delimiter_start is None:
+                reasoning_token_count = len(self._encode_metadata_text(reasoning))
+                answer_token_count = len(self._encode_metadata_text(answer))
+            else:
+                delimiter_end = delimiter_start + len(delimiter_token_ids)
+                reasoning_token_count = delimiter_start
+                answer_token_count = len(token_ids) - delimiter_end
+
+        return base_metadata | {
+            "has_think_end_token": think_end_match is not None,
+            "think_end_token": self.think_end_token,
+            "matched_think_end_token": (
+                think_end_match.group(0) if think_end_match else None
+            ),
+            "reasoning": reasoning,
+            "answer_before_post_processing": answer,
+            "reasoning_word_count": len(reasoning.split()),
+            "answer_word_count": len(answer.split()),
+            "reasoning_token_count": reasoning_token_count,
+            "answer_token_count": answer_token_count,
+        }
+
     def generate_until(
         self, requests: list[Instance], disable_tqdm: bool = False
     ) -> list[str]:
         assert self.tokenizer
         res = []
+        completion_metadata = []
 
         # batch tokenize contexts
         context, all_gen_kwargs = zip(*(req.args for req in requests), strict=True)
@@ -707,11 +789,21 @@ class VLLM(TemplateLM):
             for output, _context, _gen_kwargs in zip(
                 cont, context, _cache_gen_kwargs, strict=True
             ):
-                generated_text: str = output.outputs[0].text
-                # use secondary stop seqs to cut off should-have-been-stopped content post-hoc
-                generated_text = postprocess_generated_text(
-                    generated_text, _gen_kwargs.get("until"), self.think_end_token
-                )
+                completion = output.outputs[0]
+                generated_text: str = completion.text
+                if self.log_completion_metadata:
+                    metadata = self._get_completion_metadata(completion)
+                    completion_metadata.append(metadata)
+                    generated_text = metadata.pop("answer_before_post_processing")
+                    # use secondary stop seqs to cut off should-have-been-stopped content post-hoc
+                    generated_text = postprocess_generated_text(
+                        generated_text, _gen_kwargs.get("until"), None
+                    )
+                else:
+                    # use secondary stop seqs to cut off should-have-been-stopped content post-hoc
+                    generated_text = postprocess_generated_text(
+                        generated_text, _gen_kwargs.get("until"), self.think_end_token
+                    )
                 res.append(generated_text)
                 self.cache_hook.add_partial(
                     "generate_until", (_context, _gen_kwargs), generated_text
@@ -720,7 +812,12 @@ class VLLM(TemplateLM):
 
         pbar.close()
         # reorder all group of results back to original unsorted form
-        return re_ords.get_original(res)
+        res = re_ords.get_original(res)
+        if self.log_completion_metadata:
+            completion_metadata = re_ords.get_original(completion_metadata)
+            for req, metadata in zip(requests, completion_metadata, strict=True):
+                req.generation_metadata.append(metadata)
+        return res
 
     def _loglikelihood_tokens(
         self,
