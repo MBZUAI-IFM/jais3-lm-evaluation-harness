@@ -22,11 +22,13 @@ metric_list:
       - "\\.$"
 generation_kwargs:
   until:
-    - "Q:"
-    - "</s>"
-    - "<|im_end|>"
-    - "<|eot_id|>"
-    - "<|endoftext|>"
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
   do_sample: false
 repeats: 1
 num_fewshot: 0

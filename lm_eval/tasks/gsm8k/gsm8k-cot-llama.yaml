@@ -58,11 +58,13 @@ filter_list:
 generation_kwargs:
   do_sample: false
   until:
-  - '<|eot_id|>'
-  - '<|start_header_id|>user<|end_header_id|>'
-  - 'Q:'
-  - </s>
-  - <|im_end|>
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
 tag:
 - chain_of_thought
 metric_list:

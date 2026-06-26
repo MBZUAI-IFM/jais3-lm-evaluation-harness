@@ -39,11 +39,13 @@ filter_list:
 generation_kwargs:
   do_sample: false
   until:
-  - 'Q:'
-  - "<|eot_id|>"
-  - "<|endoftext|>"
-  - </s>
-  - <|im_end|>
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
   max_gen_toks: 8192
   temperature: 0.0
 tag:
