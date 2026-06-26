@@ -655,7 +655,7 @@ class VLLM(TemplateLM):
     def _get_completion_metadata(self, completion: Any) -> dict[str, Any]:
         raw_text = completion.text
         token_ids = getattr(completion, "token_ids", None) or []
-        is_thinking_mode = self.enable_thinking or self.think_end_token is not None
+        is_thinking_mode = self.enable_thinking and self.think_end_token is not None
 
         base_metadata = {
             "finish_reason": getattr(completion, "finish_reason", None),
