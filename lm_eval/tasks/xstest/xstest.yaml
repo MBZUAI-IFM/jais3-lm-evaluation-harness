@@ -1,0 +1,33 @@
+task: xstest
+dataset_path: Paul/XSTest
+test_split: train
+output_type: generate_until
+doc_to_text: "{{prompt}}"
+doc_to_target: "{{label}}"
+# XSTest (arXiv:2308.01263) — 450 prompts probing EXAGGERATED SAFETY: 250 *safe* prompts a
+# well-calibrated model should answer, plus 200 *unsafe* contrast prompts it should refuse.
+# Unlike HarmBench/StrongREJECT (all-harmful), the two halves have OPPOSITE desired behaviour,
+# so the score splits by doc["label"] (safe vs unsafe). The metric below is only the official
+# AUTOMATED string-match BASELINE (classify_completions_strmatch.py, reproduced verbatim in
+# utils.py): it maps each completion to full_compliance / full_refusal by refusal-opener match,
+# then reports the label-aware calibration accuracy (comply on safe, refuse on unsafe). The
+# authoritative 3-way score (full_compliance / full_refusal / partial_refusal) is the official
+# GPT-4 classifier, run here as the LLM judge: judge_vllm.py routes this task to
+# judge_prompts.xstest_prompt and judge_vllm.xstest_scores reports over-refusal on safe prompts
+# + refusal on unsafe prompts + per-type rates. Mirrors the harmbench/strongreject pattern.
+metric_list:
+  - metric: !function utils.xstest_strmatch_baseline
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0
