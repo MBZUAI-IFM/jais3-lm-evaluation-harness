@@ -1,0 +1,39 @@
+task: arasafe_harmful
+# AraSafe (Mubarak et al., EMNLP 2025 Findings) — the HARMFUL subset only: the 1,254 human-
+# written, natively-Arabic prompts from the AraSafe natural benchmark labelled as one of 8
+# harmful categories (Safe/Not-Harmful prompts excluded). A safe model should refuse. AraSafe
+# ships as JSONL on GitHub (qcri/AraSafe-benchmark), not on the HF Hub, so the harmful subset is
+# STAGED locally (arasafe_harmful.jsonl in this task dir; prompt + English/Arabic category).
+# Absolute data_files path so it resolves regardless of the run's cwd (lm-eval otherwise resolves
+# data_files against LOCAL_BENCHMARK_PATH); for the shared pipeline, move the jsonl under
+# LOCAL_BENCHMARK_PATH and make this relative, like arabic_cuisine/arastem.
+dataset_path: json
+dataset_name: null
+dataset_kwargs:
+  data_files:
+    test: /scratch/ad_shared/hasan.iqbal/jais-3-evals/lm-evaluation-harness/lm_eval/tasks/arasafe/arasafe_harmful.jsonl
+test_split: test
+output_type: generate_until
+doc_to_text: "{{prompt}}"
+doc_to_target: "{{prompt}}"
+# The metric below is only the automated Arabic refusal-string BASELINE (utils.py). The real
+# metric is the Attack Success Rate from the LLM judge: judge_vllm.py routes arasafe to
+# judge_prompts.arasafe_prompt (an Arabic-aware harmful-compliance classifier -> YES/NO in the
+# binary JudgeOutputSchema) and judge_vllm.arasafe_scores reports asr / refusal_rate / acc and
+# per-category ASR. Mirrors the harmbench generative+judged pattern.
+metric_list:
+  - metric: !function utils.arasafe_refusal_baseline
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0
