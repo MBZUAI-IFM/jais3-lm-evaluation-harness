@@ -1,0 +1,45 @@
+task: freshqa
+# FreshQA (arXiv:2310.03214; github.com/freshllms/freshqa) — 600 questions (500 TEST + 100 DEV)
+# built to expose STALE knowledge and FALSE PREMISES, the two failure modes the rest of the
+# factuality suite does not isolate. Every row carries fact_type (never/slow/fast-changing),
+# false_premise, num_hops and effective_year, which the judge scorer breaks the score down by.
+#
+# Run CLOSED-BOOK here: lm-eval has no retrieval, so this measures what the model knows and
+# whether it admits ignorance instead of confabulating. (The with-vs-without web-search
+# comparison lives outside the pipeline, in hasan.iqbal/freshqa_eval/.)
+#
+# SNAPSHOT-DATED. FreshQA answers age by construction — 90 of the 600 rows have
+# effective_year 2026 — so the vendored freshqa.jsonl is a point-in-time capture and the judge
+# is anchored to the same date (judge_prompts.FRESHEVAL_CURRENT_DATE = "April 21, 2026").
+# Refresh both together, or fast-changing rows start scoring as wrong when they are merely old.
+dataset_path: json
+dataset_kwargs:
+  data_files:
+    test: FreshQA/freshqa.jsonl
+test_split: test
+output_type: generate_until
+# Official FreshQA baseline prompting: the bare question, no instruction wrapper, so the model's
+# own default behaviour (commit vs hedge vs abstain) is what gets measured.
+doc_to_text: "{{question}}"
+doc_to_target: "{{answers[0]}}"
+# Automated baseline only, reported ALONGSIDE the real score. The real score comes from the LLM
+# judge (judge_vllm.py): FreshEval-strict graded TERNARY (judge_prompts.fresheval_prompt ->
+# SimpleQAJudgeOutputSchema, A/B/C) so abstention is separated from hallucination, plus the
+# per-fact_type / false_premise / num_hops breakdowns from judge_vllm.freshqa_scores.
+metric_list:
+  - metric: !function utils.freshqa_automated_metrics
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0
+  snapshot_date: "April 21, 2026"
