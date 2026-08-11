@@ -36,6 +36,7 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
             "answer": normalize_final_answer(
                 remove_boxed(last_boxed_only_string(doc["solution"]))
             ),
+            "answer_not_normalized": remove_boxed(last_boxed_only_string(doc["solution"])),
         }
         if getattr(doc, "few_shot", None) is not None:
             out_doc["few_shot"] = True

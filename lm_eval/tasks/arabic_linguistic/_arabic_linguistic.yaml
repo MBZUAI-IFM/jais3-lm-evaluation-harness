@@ -1,0 +1,14 @@
+group: arabic_linguistic_mcq
+group_alias: Arabic Linguistic group
+task:
+  - arabic_linguistic_morphological_ambiguity
+  - arabic_linguistic_ner
+  - arabic_linguistic_rhetoric
+  - arabic_linguistic_tokenization
+  - ALP_arabic_parsing
+  - ALP_arabic_diacritization
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0

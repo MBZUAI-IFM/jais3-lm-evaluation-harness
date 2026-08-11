@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_pathology
+task_alias: "MedAraBench - Pathology"
+metadata:
+  version: 1.0
+  subset: "Pathology"

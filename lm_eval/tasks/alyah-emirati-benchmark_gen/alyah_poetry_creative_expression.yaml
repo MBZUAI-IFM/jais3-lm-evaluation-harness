@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_poetry_creative_expression_gen
+task_alias: "Alyah - Poetry & Creative Expression_gen"
+metadata:
+  version: 1.0
+  category: "Poetry & Creative Expression"

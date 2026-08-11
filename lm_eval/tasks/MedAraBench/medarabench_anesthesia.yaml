@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_anesthesia
+task_alias: "MedAraBench - Anesthesia"
+metadata:
+  version: 1.0
+  subset: "Anesthesia"

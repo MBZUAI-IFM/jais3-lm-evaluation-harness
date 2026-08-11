@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_gastroenterology_hepatology
+task_alias: "MedAraBench - Gastroenterology & Hepatology"
+metadata:
+  version: 1.0
+  subset: "Gastroenterology & Hepatology"

@@ -5,7 +5,7 @@ task: simpleqa_verified_ar
 dataset_path: json
 dataset_kwargs:
   data_files:
-    test: /jais3/data/jais_2/benchmarks/SimpleQA_Verified_AR/simpleqa_verified_ar.jsonl
+    test: ./SimpleQA_Verified_AR/simpleqa_verified_ar.jsonl
 test_split: test
 output_type: generate_until
 doc_to_text: "{{problem_ar}}"

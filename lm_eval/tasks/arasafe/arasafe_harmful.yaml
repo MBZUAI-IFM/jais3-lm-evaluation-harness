@@ -11,7 +11,7 @@ dataset_path: json
 dataset_name: null
 dataset_kwargs:
   data_files:
-    test: /scratch/ad_shared/hasan.iqbal/jais-3-evals/lm-evaluation-harness/lm_eval/tasks/arasafe/arasafe_harmful.jsonl
+    test: ./AraSafe/arasafe_harmful.jsonl
 test_split: test
 output_type: generate_until
 doc_to_text: "{{prompt}}"

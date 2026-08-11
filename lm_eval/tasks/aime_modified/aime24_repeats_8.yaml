@@ -1,0 +1,9 @@
+task: aime24_modified_repeats_8
+include: aime24.yaml
+
+metric_list:
+  - metric: !function utils.aime_math_pass_at_k
+    k: [1,2,4,8]
+    aggregation: mean
+    higher_is_better: true
+repeats: 8
