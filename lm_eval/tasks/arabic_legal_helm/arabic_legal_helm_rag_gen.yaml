@@ -1,15 +1,19 @@
-task: arabic_finance_helm_bool_gen
+task: arabic_legal_helm_rag_gen
 tag:
-  - arabic_finance_helm_gen_tasks
+  - arabic_legal_helm_tasks
 dataset_path: stanford-crfm/arabic-enterprise
-dataset_name: finance
+dataset_name: legal
 dataset_kwargs:
   revision: 35e114eda2e3450e0e69cf6bda9d3a2f54bf6f26
 test_split: test
 output_type: generate_until
-process_docs: !function utils.process_docs_bool_gen
-doc_to_text: "{{query}}"
-doc_to_target: "{{gold_letter_ar}}"
+process_docs: !function utils.process_docs_rag
+doc_to_text: "{{input}}"
+doc_to_target: "{{answer}}"
+metric_list:
+  - metric: !function utils.placeholder_metric
+    aggregation: mean
+    higher_is_better: true
 generation_kwargs:
   until:
     - <end_of_turn>
@@ -20,9 +24,5 @@ generation_kwargs:
     - <|eot_id|>
     - <|endoftext|>
   do_sample: false
-metric_list:
-  - metric: !function utils.placeholder_metric
-    aggregation: mean
-    higher_is_better: true
 metadata:
   version: 0.0

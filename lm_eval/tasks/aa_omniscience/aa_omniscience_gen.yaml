@@ -1,0 +1,4 @@
+include: _aa_omniscience_common_yaml
+tag:
+  - aa_omniscience_tasks
+task: aa_omniscience_gen

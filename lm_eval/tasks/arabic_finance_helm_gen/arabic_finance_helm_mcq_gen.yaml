@@ -16,6 +16,9 @@ generation_kwargs:
     - <|im_end|>
     - <eos>
     - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
   do_sample: false
 metric_list:
   - metric: !function utils.placeholder_metric

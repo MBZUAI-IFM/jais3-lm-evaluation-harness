@@ -1,0 +1,11 @@
+group: longbench2_english_64k_gen
+task:
+  - longbench2_en_academic_64k_gen
+  - longbench2_en_academic_mqa_64k_gen
+  - longbench2_en_multinews_64k_gen
+  # - longbench2_en_detective_64k_gen
+aggregate_metric_list:
+  - metric: exact_match
+    weight_by_size: true
+metadata:
+  version: 0.0
