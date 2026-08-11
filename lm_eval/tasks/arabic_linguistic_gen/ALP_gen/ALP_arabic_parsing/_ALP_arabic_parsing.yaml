@@ -1,0 +1,11 @@
+group: ALP_arabic_parsing_gen
+group_alias: ALP Arabic Parsing_gen
+task:
+  - ALP_arabic_parsing_easy_gen
+  - ALP_arabic_parsing_medium_gen
+  - ALP_arabic_parsing_difficult_gen
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0

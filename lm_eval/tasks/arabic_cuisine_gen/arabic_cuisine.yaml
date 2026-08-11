@@ -28,6 +28,7 @@ generation_kwargs:
     - <|end_of_text|>
     - <|eot_id|>
     - <|endoftext|>
+    - <|im_end|>
   do_sample: false
 
 process_docs: !function utils.add_options_with_text

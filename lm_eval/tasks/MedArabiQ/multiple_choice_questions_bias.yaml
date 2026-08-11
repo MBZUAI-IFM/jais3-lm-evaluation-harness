@@ -1,0 +1,5 @@
+task: MedArabiQ_multiple_choice_questions_bias
+dataset_kwargs:
+  data_files:
+    test: ./MedArabiQ/new_data/mcq_bias_test.json
+include: _default_mcq_template_yaml

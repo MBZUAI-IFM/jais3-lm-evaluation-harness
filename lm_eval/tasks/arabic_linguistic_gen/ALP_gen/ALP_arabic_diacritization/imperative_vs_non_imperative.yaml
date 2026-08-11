@@ -1,0 +1,10 @@
+include: ../_default_template_yaml
+task: ALP_arabic_diacritization_imperative_vs_non_imperative_gen
+task_alias: "ALP Arabic Diacritization - Imperative vs Non-imperative_gen"
+dataset_kwargs:
+  data_filename: 
+    ./arabic_linguistic/ALP_arabic_diacritization/Arabic_Diacritization_Benchmark_ALP_1500_Reviewed.jsonl
+  category_value: imperative_vs_non_imperative
+metadata:
+  version: 1.0
+  category: imperative_vs_non_imperative

@@ -1,0 +1,43 @@
+task: freshqa_ar
+# FreshQA-Arabic — the FreshQA (arXiv:2310.03214) 600-question set translated to Arabic, aligned
+# ROW-FOR-ROW with the English `freshqa` task: same ids, same fact_type / false_premise / num_hops
+# / effective_year, so the two are directly comparable and the EN-vs-AR gap on a given question is
+# a language gap, not a sampling difference.
+#
+# Same protocol as the English task: CLOSED-BOOK (lm-eval has no retrieval), bare question with no
+# instruction wrapper, graded by the FreshEval-strict rubric TERNARY (A/B/C) so abstention is
+# separated from hallucination — see judge_prompts.fresheval_prompt, which grades by meaning and
+# accepts an answer in either language.
+#
+# SNAPSHOT-DATED, same as the English set: refresh freshqa_ar.jsonl and
+# judge_prompts.FRESHEVAL_CURRENT_DATE together, or fast-changing rows score as wrong for being old.
+# Note some gold answers stay in Latin script (proper nouns, numbers) — that is expected and the
+# judge is told to grade by meaning rather than by script.
+dataset_path: json
+dataset_kwargs:
+  data_files:
+    test: FreshQA/freshqa_ar.jsonl
+test_split: test
+output_type: generate_until
+doc_to_text: "{{question}}"
+doc_to_target: "{{answers[0]}}"
+# Automated baseline only (Arabic-normalized cover_match), reported ALONGSIDE the real score from
+# the LLM judge (judge_vllm.freshqa_scores: ternary metrics + per fact_type / false_premise /
+# num_hops breakdowns), which lands under separate keys and survives the merge.
+metric_list:
+  - metric: !function utils.freshqa_ar_automated_metrics
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0
+  snapshot_date: "April 21, 2026"

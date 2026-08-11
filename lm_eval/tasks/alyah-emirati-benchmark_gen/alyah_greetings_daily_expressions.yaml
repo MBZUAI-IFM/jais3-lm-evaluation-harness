@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_greetings_daily_expressions_gen
+task_alias: "Alyah - Greetings & Daily Expressions_gen"
+metadata:
+  version: 1.0
+  category: "Greetings & Daily Expressions"

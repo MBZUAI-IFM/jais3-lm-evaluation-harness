@@ -1,0 +1,6 @@
+include: _uae_knowledge_common_yaml
+task: uae_knowledge_ksa_gen
+dataset_kwargs:
+  data_files:
+    test:
+      ./uae_knowledge_gen/uae_knowledge_ksa.json

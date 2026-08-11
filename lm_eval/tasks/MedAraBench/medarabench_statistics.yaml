@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_statistics
+task_alias: "MedAraBench - Statistics"
+metadata:
+  version: 1.0
+  subset: "Statistics"

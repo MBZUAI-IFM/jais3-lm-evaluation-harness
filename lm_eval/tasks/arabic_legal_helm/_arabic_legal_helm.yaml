@@ -1,0 +1,9 @@
+group: arabic_legal_helm_gen
+task:
+  - arabic_legal_helm_qa_gen
+  - arabic_legal_helm_rag_gen
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: true
+metadata:
+  version: 0.0

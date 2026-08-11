@@ -1,0 +1,36 @@
+task: arabic_finance_helm_bool
+tag:
+  - arabic_finance_helm_tasks
+dataset_path: stanford-crfm/arabic-enterprise
+dataset_name: finance
+dataset_kwargs:
+  revision: 35e114eda2e3450e0e69cf6bda9d3a2f54bf6f26
+test_split: test
+output_type: generate_until
+process_docs: !function utils.process_docs_bool
+doc_to_text: "{{query}}"
+doc_to_target: "{{bool_answer_ar}}"
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <|im_end|>
+    - <eos>
+    - </s>
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 10
+filter_list:
+  - name: extract-bool
+    filter:
+      - function: regex
+        regex_pattern: "(نعم|لا)"
+        group_select: 0
+      - function: take_first
+metric_list:
+  - metric: exact_match
+    aggregation: mean
+    higher_is_better: true
+    ignore_case: false
+    ignore_punctuation: false
+metadata:
+  version: 1.0

@@ -1,0 +1,44 @@
+# Arabic OpenAI-MMMLU (Omartificial-Intelligence-Space/Arabic_Openai_MMMLU) — the 57-subject MMLU
+# test set human-translated to Arabic; the data behind the ILMAAM leaderboard. Generative
+# (generate_until), evaluated the OpenAI simple-evals way: zero-shot, English instruction + Arabic
+# Q/choices, model thinks then emits 'Answer: $LETTER', letter extracted with OpenAI's multilingual
+# (Arabic-aware) regexes. process_docs caps to the leaderboard's first-100-per-subject protocol.
+# Data staged locally (offline runs); ABSOLUTE data_files path so it resolves under the sbatch cwd.
+# In-pipeline metric is micro exact_match; the leaderboard-headline macro average (mean over the 57
+# subjects), per-subject breakdown and parity vs the leaderboard are computed by
+# hasan.iqbal/mmmlu_ar_eval/mmmlu_score.py (finish_reason-aware, handles the A8x4 low-effort case).
+task: mmmlu_ar
+dataset_path: json
+dataset_name: null
+dataset_kwargs:
+  data_files:
+    test: ./arabic_mmmlu/mmmlu_ar.jsonl
+output_type: generate_until
+test_split: test
+num_fewshot: 0
+process_docs: !function utils.process_docs
+doc_to_text: !function utils.doc_to_text
+doc_to_target: !function utils.doc_to_target
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 2048
+filter_list:
+  - name: extract_answer
+    filter:
+      - function: custom
+        filter_fn: !function utils.extract_answer
+metric_list:
+  - metric: !function utils.exact_match_letter
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
