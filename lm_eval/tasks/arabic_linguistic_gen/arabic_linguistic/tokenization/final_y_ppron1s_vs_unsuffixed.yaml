@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_final_y_ppron1s_vs_unsuffixed_gen
+task_alias: "Tokenization - Final Y PPRON1S vs Unsuffixed_gen"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: FINAL_Y_PPRON1S_vs_UNSUFFIXED
+metadata:
+  version: 1.0
+  category: final_y_ppron1s_vs_unsuffixed

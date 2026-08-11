@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_pharmacology
+task_alias: "MedAraBench - Pharmacology"
+metadata:
+  version: 1.0
+  subset: "Pharmacology"

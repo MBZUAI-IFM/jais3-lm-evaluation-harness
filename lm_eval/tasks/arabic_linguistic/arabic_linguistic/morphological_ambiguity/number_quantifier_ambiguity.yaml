@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_morphological_ambiguity_number_quantifier_ambiguity
+task_alias: "Morphological Ambiguity - Number vs Quantifier"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_morphological_ambiguiy_mcq_benchmark.json
+  category_field: ambiguity_type
+  category_value: number_quantifier_ambiguity
+metadata:
+  version: 1.0
+  category: number_quantifier_ambiguity

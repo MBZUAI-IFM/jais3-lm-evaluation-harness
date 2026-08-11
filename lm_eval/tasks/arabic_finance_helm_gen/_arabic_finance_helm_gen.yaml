@@ -1,0 +1,10 @@
+group: arabic_finance_helm_gen
+task:
+  - arabic_finance_helm_mcq_gen
+  - arabic_finance_helm_bool_gen
+  - arabic_finance_helm_calculation_gen
+aggregate_metric_list:
+  - metric: acc
+    weight_by_size: true
+metadata:
+  version: 0.0

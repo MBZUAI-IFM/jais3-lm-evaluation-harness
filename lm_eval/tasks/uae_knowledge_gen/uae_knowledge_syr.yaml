@@ -1,0 +1,9 @@
+# Levantine-Syrian dialect. Same 771 items / same gold letters as uae_knowledge (MSA);
+# only the question and option wording differs.
+
+include: _uae_knowledge_common_yaml
+task: uae_knowledge_syr_gen
+dataset_kwargs:
+  data_files:
+    test:
+      ./uae_knowledge_gen/uae_knowledge_syr.json

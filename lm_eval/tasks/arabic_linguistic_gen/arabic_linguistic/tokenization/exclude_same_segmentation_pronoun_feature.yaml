@@ -1,0 +1,12 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: 
+  arabic_linguistic_tokenization_exclude_same_segmentation_pronoun_feature_gen
+task_alias: "Tokenization - Same Segmentation Pronoun Feature_gen"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: EXCLUDE_SAME_SEGMENTATION_PRONOUN_FEATURE
+metadata:
+  version: 1.0
+  category: exclude_same_segmentation_pronoun_feature

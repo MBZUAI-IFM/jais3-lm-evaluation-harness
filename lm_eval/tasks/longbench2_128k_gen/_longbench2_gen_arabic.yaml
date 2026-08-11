@@ -1,0 +1,11 @@
+group: longbench2_arabic_128k_gen
+task:
+  - longbench2_ar_academic_128k_gen
+  - longbench2_ar_academic_mqa_128k_gen
+  - longbench2_ar_multinews_128k_gen
+  # - longbench2_ar_detective_128k_gen
+aggregate_metric_list:
+  - metric: exact_match
+    weight_by_size: true
+metadata:
+  version: 0.0

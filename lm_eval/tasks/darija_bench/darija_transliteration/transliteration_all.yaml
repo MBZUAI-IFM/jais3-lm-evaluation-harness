@@ -4,6 +4,6 @@
 "task": "transliteration_all"
 "task_alias": "all"
 metric_list:
-  - metric: !function utils.bert
-    aggregation: !function utils.mbert
-    higher_is_better: true
+  # - metric: !function utils.bert
+  #   aggregation: !function utils.mbert
+  #   higher_is_better: true

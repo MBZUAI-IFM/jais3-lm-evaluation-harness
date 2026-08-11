@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_function_word_lexicalization
+task_alias: "Tokenization - Function Word Lexicalization"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: FUNCTION_WORD_LEXICALIZATION
+metadata:
+  version: 1.0
+  category: function_word_lexicalization

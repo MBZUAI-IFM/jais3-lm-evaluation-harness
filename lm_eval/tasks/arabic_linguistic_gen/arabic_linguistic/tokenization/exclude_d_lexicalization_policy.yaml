@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_exclude_d_lexicalization_policy_gen
+task_alias: "Tokenization - Excluded Lexicalization Policy_gen"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: EXCLUDE_D_LEXICALIZATION_POLICY
+metadata:
+  version: 1.0
+  category: exclude_d_lexicalization_policy

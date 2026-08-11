@@ -16,7 +16,7 @@ dataset_path: json
 dataset_name: null
 dataset_kwargs:
   data_files:
-    test: /jais3/data/jais_2/benchmarks/arabic_broad_benchmark/abb.jsonl
+    test: ./arabic_broad_benchmark/abb.jsonl
 test_split: test
 output_type: generate_until
 doc_to_text: "{{instruction}}"
