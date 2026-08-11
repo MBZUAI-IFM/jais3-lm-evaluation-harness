@@ -1,0 +1,5 @@
+task: MedArabiQ_fill_in_blank_choices_gen
+dataset_kwargs:
+  data_files:
+    test: ./MedArabiQ/new_data/fib_with_choices_test.json
+include: _default_mcq_template_yaml

@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_emergency_medicine
+task_alias: "MedAraBench - Emergency Medicine"
+metadata:
+  version: 1.0
+  subset: "Emergency Medicine"

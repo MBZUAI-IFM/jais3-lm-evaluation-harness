@@ -197,7 +197,7 @@ class LocalChatCompletion(LocalCompletionsAPI):
         stop = handle_stop_sequences(gen_kwargs.pop("until", None), eos)
         if not isinstance(stop, (list, tuple)):
             stop = [stop]
-        return {
+        payload = {
             "messages": messages,
             "model": self.model,
             "max_tokens": max_tokens,
@@ -206,6 +206,11 @@ class LocalChatCompletion(LocalCompletionsAPI):
             "seed": seed,
             **gen_kwargs,
         }
+
+        if "base_url" in kwargs:
+            payload["base_url"] = kwargs["base_url"]
+
+        return payload
 
     @staticmethod
     def parse_generations(outputs: Union[Dict, List[Dict]], **kwargs) -> List[str]:

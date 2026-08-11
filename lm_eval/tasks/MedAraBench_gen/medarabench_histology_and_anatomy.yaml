@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_histology_and_anatomy_gen
+task_alias: "MedAraBench - Histology and Anatomy_gen"
+metadata:
+  version: 1.0
+  subset: "Histology and Anatomy"

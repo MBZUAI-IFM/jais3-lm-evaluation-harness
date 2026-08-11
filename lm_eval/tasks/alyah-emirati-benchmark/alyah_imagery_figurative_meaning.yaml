@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_imagery_figurative_meaning
+task_alias: "Alyah - Imagery & Figurative Meaning"
+metadata:
+  version: 1.0
+  category: "Imagery & Figurative Meaning"

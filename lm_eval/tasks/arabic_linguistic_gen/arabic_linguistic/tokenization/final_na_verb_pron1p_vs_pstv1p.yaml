@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_final_na_verb_pron1p_vs_pstv1p_gen
+task_alias: "Tokenization - Final NA Verb PRON1P vs PSTV1P_gen"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: FINAL_NA_VERB_PRON1P_vs_PSTV1P
+metadata:
+  version: 1.0
+  category: final_na_verb_pron1p_vs_pstv1p

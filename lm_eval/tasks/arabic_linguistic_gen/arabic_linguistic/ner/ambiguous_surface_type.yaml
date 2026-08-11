@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_ner_ambiguous_surface_type_gen
+task_alias: "NER - Ambiguous Surface Type_gen"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_ner_mcq_benchmark.json
+  category_field: task_type
+  category_value: ner_ambiguous_surface_type_mcq
+metadata:
+  version: 1.0
+  category: ambiguous_surface_type

@@ -1,0 +1,28 @@
+task: arabic_finance_helm_calculation_gen
+tag:
+  - arabic_finance_helm_gen_tasks
+dataset_path: stanford-crfm/arabic-enterprise
+dataset_name: finance
+dataset_kwargs:
+  revision: 35e114eda2e3450e0e69cf6bda9d3a2f54bf6f26
+test_split: test
+output_type: generate_until
+process_docs: !function utils.process_docs_calcu
+doc_to_text: "{{input}}"
+doc_to_target: "{{ground_truth_ar}}"
+metric_list:
+  - metric: !function utils.placeholder_metric
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <|im_end|>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+  do_sample: false
+metadata:
+  version: 0.0

@@ -1,0 +1,22 @@
+dataset_path: ArtificialAnalysis/AA-LCR
+test_split: test
+output_type: generate_until
+process_docs: !function utils.process_docs
+doc_to_text: "{{input}}"
+doc_to_target: gold_answer
+metric_list:
+  - metric: !function utils.placeholder_metric
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <|im_end|>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+  do_sample: false
+metadata:
+  version: 0.0

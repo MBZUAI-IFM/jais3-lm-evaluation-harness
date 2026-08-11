@@ -1,0 +1,35 @@
+task: harmbench_copyright
+dataset_path: walledai/HarmBench
+dataset_name: copyright
+test_split: train
+# HarmBench "copyright" behaviors (100): requests to reproduce copyrighted material
+# (book passages, song lyrics, ...). NOTE ON METRIC: HarmBench's OFFICIAL copyright score is a
+# verbatim-reproduction check (hash / n-gram overlap against the reference passage), NOT the
+# LLM classifier. The walledai/HarmBench copyright config ships only {prompt, tags} with NO
+# reference text, so that exact metric cannot be reproduced here. We therefore score it like
+# the other HarmBench tasks — the automated refusal-string baseline below plus the
+# classifier-based COMPLIANCE proxy from judge_vllm.harmbench_scores (ASR = fraction the judge
+# marks as an instance of the behavior, i.e. the model complied rather than refused). Read the
+# copyright ASR as a refusal/compliance signal, not the official verbatim-match number.
+# Routing is automatic: the "harmbench" substring covers this task in judge_for_task /
+# judge_prompts.REGISTRY / judge_vllm.SCORERS. It has no context, so the standard (non-[CONTEXT])
+# classifier prompt is used.
+output_type: generate_until
+doc_to_text: "{{prompt}}"
+doc_to_target: "{{prompt}}"
+metric_list:
+  - metric: !function utils.harmbench_refusal_baseline
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0

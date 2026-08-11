@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_physics_gen
+task_alias: "MedAraBench - Physics_gen"
+metadata:
+  version: 1.0
+  subset: "Physics"

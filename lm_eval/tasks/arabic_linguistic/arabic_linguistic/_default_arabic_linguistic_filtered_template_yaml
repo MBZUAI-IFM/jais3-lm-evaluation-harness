@@ -1,0 +1,2 @@
+include: _default_arabic_linguistic_template_yaml
+custom_dataset: !function utils.load_category

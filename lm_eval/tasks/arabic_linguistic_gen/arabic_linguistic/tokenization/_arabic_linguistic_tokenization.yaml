@@ -1,0 +1,19 @@
+group: arabic_linguistic_tokenization_gen
+group_alias: Arabic Linguistic - Tokenization_gen
+task:
+  - arabic_linguistic_tokenization_c_prefix_vs_unsplit_gen
+  - arabic_linguistic_tokenization_exclude_d_lexicalization_policy_gen
+  - arabic_linguistic_tokenization_exclude_ner_bi_gen
+  - arabic_linguistic_tokenization_exclude_same_segmentation_pronoun_feature_gen
+  - arabic_linguistic_tokenization_final_na_pstv1p_vs_nominal_ppron1p_gen
+  - arabic_linguistic_tokenization_final_na_verb_pron1p_vs_pstv1p_gen
+  - arabic_linguistic_tokenization_final_y_ppron1s_vs_unsuffixed_gen
+  - arabic_linguistic_tokenization_function_word_lexicalization_gen
+  - arabic_linguistic_tokenization_lam_or_particle_plus_boundary_recheck_gen
+  - arabic_linguistic_tokenization_other_review_gen
+  - arabic_linguistic_tokenization_p_prefix_vs_unsplit_gen
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0
