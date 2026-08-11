@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_p_prefix_vs_unsplit
+task_alias: "Tokenization - P Prefix vs Unsplit"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: P_PREFIX_vs_UNSPLIT
+metadata:
+  version: 1.0
+  category: p_prefix_vs_unsplit

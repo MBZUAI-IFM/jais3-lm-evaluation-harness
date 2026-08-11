@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_ner_prefixed_entity_gen
+task_alias: "NER - Prefixed Entity_gen"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_ner_mcq_benchmark.json
+  category_field: task_type
+  category_value: ner_prefixed_entity_mcq
+metadata:
+  version: 1.0
+  category: prefixed_entity

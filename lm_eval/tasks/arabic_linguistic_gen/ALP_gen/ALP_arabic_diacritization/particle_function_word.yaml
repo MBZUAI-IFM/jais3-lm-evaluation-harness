@@ -1,0 +1,10 @@
+include: ../_default_template_yaml
+task: ALP_arabic_diacritization_particle_function_word_gen
+task_alias: "ALP Arabic Diacritization - Particle Function Word_gen"
+dataset_kwargs:
+  data_filename: 
+    ./arabic_linguistic/ALP_arabic_diacritization/Arabic_Diacritization_Benchmark_ALP_1500_Reviewed.jsonl
+  category_value: particle_function_word
+metadata:
+  version: 1.0
+  category: particle_function_word

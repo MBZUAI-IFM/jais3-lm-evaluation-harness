@@ -1,0 +1,5 @@
+task: MedArabiQ_multiple_choice_questions_gen
+dataset_kwargs:
+  data_files:
+    test: ./MedArabiQ/new_data/mcq_knowledge_test.json
+include: _default_mcq_template_yaml

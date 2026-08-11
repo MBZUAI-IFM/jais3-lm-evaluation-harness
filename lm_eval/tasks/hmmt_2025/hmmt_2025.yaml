@@ -2,7 +2,7 @@ task: hmmt_2025
 dataset_path: json
 dataset_kwargs:
   data_files:
-    test: /jais3/data/jais_2/benchmarks/HMMT25/HMMT_2025.jsonl
+    test: ./HMMT25/HMMT_2025.jsonl
 test_split: test
 
 output_type: generate_until

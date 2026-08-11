@@ -1,0 +1,16 @@
+group: uae_knowledge_all_gen
+task:
+  - uae_knowledge_egy_gen
+  - uae_knowledge_ksa_gen
+  - uae_knowledge_mag_gen
+  - uae_knowledge_syr_gen
+  - uae_knowledge_uae_gen
+  - uae_knowledge_msa_gen
+
+aggregate_metric_list:
+  - aggregation: mean
+    metric: exact_match
+    weight_by_size: true
+
+metadata:
+  version: 1.0

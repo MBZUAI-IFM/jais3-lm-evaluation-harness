@@ -1,14 +1,41 @@
+# def process_docs(dataset):
+#     def _helper(doc):
+#         choices = f"A.{doc['Option A']}\nB.{doc['Option B']}\nC.{doc['Option C']}"
+#         doc["choices"] = choices
+#         doc["options_with_text"] = choices
+#         return doc
+
+#     return dataset.map(_helper)
+    
+
 def process_docs(dataset):
-    def _helper(doc):
-        choices = f"A.{doc['Option A']}\nB.{doc['Option B']}\nC.{doc['Option C']}"
+    def _helper(doc, index):
+        # AraDiCE-Culture stores the correct answer in Option A for every row.
+        # Rotate the three options deterministically so each 30-row country split
+        # has exactly 10 correct A, 10 correct B, and 10 correct C labels.
+        original_choices = [doc["Option A"], doc["Option B"], doc["Option C"]]
+        gold_index = index % 3
+        rotated_choices = (
+            original_choices[-gold_index:] + original_choices[:-gold_index]
+            if gold_index
+            else original_choices
+        )
+
+        choices = "\n".join(
+            f"{label}.{choice}"
+            for label, choice in zip(("A", "B", "C"), rotated_choices, strict=True)
+        )
+
         doc["choices"] = choices
         doc["options_with_text"] = choices
+        doc["gold_label"] = ("A", "B", "C")[gold_index]
+        doc["gold_index"] = gold_index
         return doc
 
-    return dataset.map(_helper)
-    
+    return dataset.map(_helper, with_indices=True)
+
 def doc_to_target(doc):
-    return "A"
+    return doc["gold_label"]
 
 def doc_to_text(doc):
     Question = doc["Question"]

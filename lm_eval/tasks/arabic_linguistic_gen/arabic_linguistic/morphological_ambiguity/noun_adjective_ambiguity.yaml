@@ -1,0 +1,12 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_morphological_ambiguity_noun_adjective_ambiguity_gen
+task_alias: "Morphological Ambiguity - Noun vs Adjective_gen"
+dataset_kwargs:
+  data_files:
+    test: 
+      ./arabic_linguistic/mcq_version/arabic_morphological_ambiguiy_mcq_benchmark.json
+  category_field: ambiguity_type
+  category_value: noun_adjective_ambiguity
+metadata:
+  version: 1.0
+  category: noun_adjective_ambiguity

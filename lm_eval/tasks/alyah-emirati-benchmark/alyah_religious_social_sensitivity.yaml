@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_religious_social_sensitivity
+task_alias: "Alyah - Religious & Social Sensitivity"
+metadata:
+  version: 1.0
+  category: "Religious & Social Sensitivity"

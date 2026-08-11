@@ -1,0 +1,10 @@
+include: ../_default_template_yaml
+task: ALP_arabic_diacritization_active_passive_voice_gen
+task_alias: "ALP Arabic Diacritization - Active vs Passive Voice_gen"
+dataset_kwargs:
+  data_filename: 
+    ./arabic_linguistic/ALP_arabic_diacritization/Arabic_Diacritization_Benchmark_ALP_1500_Reviewed.jsonl
+  category_value: active_passive_voice
+metadata:
+  version: 1.0
+  category: active_passive_voice

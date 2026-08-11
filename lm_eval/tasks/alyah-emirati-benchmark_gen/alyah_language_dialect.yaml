@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_language_dialect_gen
+task_alias: "Alyah - Language & Dialect_gen"
+metadata:
+  version: 1.0
+  category: "Language & Dialect"

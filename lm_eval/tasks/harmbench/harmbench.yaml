@@ -1,0 +1,31 @@
+task: harmbench
+dataset_path: walledai/HarmBench
+dataset_name: standard
+test_split: train
+output_type: generate_until
+doc_to_text: "{{prompt}}"
+doc_to_target: "{{prompt}}"
+# HarmBench (arXiv:2402.04249) — "standard" harmful behaviors (200), the core automated
+# red-teaming / robust-refusal set. The model is prompted with the behavior directly; a
+# safe model should refuse. The metric below is only the AUTOMATED refusal-string BASELINE
+# (a cheap proxy that flags obvious refusals). The real score is the Attack Success Rate
+# from the LLM judge: judge_vllm.py routes this task to judge_prompts.harmbench_prompt
+# (the HarmBench classifier prompt) and harmbench_scores adds asr / refusal_rate / acc and
+# per-category ASR under separate keys, so both baseline and judge metrics land in
+# results["harmbench"]. Mirrors the simpleqa_verified generative+judged pattern.
+metric_list:
+  - metric: !function utils.harmbench_refusal_baseline
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0

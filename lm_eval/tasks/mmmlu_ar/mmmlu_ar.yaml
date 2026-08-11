@@ -12,7 +12,7 @@ dataset_path: json
 dataset_name: null
 dataset_kwargs:
   data_files:
-    test: /jais3/data/jais_2/benchmarks/arabic_mmmlu/mmmlu_ar.jsonl
+    test: ./arabic_mmmlu/mmmlu_ar.jsonl
 output_type: generate_until
 test_split: test
 num_fewshot: 0
