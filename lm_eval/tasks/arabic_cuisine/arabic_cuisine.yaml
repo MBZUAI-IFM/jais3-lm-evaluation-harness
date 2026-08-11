@@ -3,7 +3,7 @@ dataset_path: json
 dataset_name: null
 dataset_kwargs:
   data_files:
-    test: ./cuisine/arabic_cuisine_benchmark.json
+    test: ./arabic_cuisine/final_cuisine_benchmark.json
 test_split: test
 
 output_type: multiple_choice

@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_final_na_pstv1p_vs_nominal_ppron1p
+task_alias: "Tokenization - Final NA PSTV1P vs Nominal PPRON1P"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: FINAL_NA_PSTV1P_vs_NOMINAL_PPRON1P
+metadata:
+  version: 1.0
+  category: final_na_pstv1p_vs_nominal_ppron1p

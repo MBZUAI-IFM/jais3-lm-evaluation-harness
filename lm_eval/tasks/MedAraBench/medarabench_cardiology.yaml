@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_cardiology
+task_alias: "MedAraBench - Cardiology"
+metadata:
+  version: 1.0
+  subset: "Cardiology"

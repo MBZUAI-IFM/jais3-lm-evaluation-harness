@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_anatomy
+task_alias: "MedAraBench - Anatomy"
+metadata:
+  version: 1.0
+  subset: "Anatomy"

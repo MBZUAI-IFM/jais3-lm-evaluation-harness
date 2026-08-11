@@ -1,0 +1,14 @@
+group: arabic_linguistic_gen
+group_alias: Arabic Linguistic_gen
+task:
+  - arabic_linguistic_morphological_ambiguity_gen
+  - arabic_linguistic_ner_gen
+  - arabic_linguistic_rhetoric_gen
+  - arabic_linguistic_tokenization_gen
+  - ALP_arabic_parsing_gen
+  - ALP_arabic_diacritization_gen
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0

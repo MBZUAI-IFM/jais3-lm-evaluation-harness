@@ -1,0 +1,9 @@
+include: ../_default_arabic_linguistic_template_yaml
+task: arabic_linguistic_rhetoric
+task_alias: "Arabic Linguistic - Rhetoric"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_rhetoric_mcq_benchmark.json
+metadata:
+  version: 1.0
+  category: rhetoric

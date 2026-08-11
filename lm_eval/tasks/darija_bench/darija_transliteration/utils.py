@@ -18,8 +18,12 @@ def ar_dr(dataset: datasets.Dataset):
 
 
 def doc_to_text(doc):
+    additional_instruction = "عافاك، كتب غير المطلوب، بلا حتى مقدمة، ولا تعليق، ولا شرح، ولا حتى كلام زايد."
+    if doc["direction"] == "dr_ar":
+        arabizi_confusion_instruction = "العربزي تعني arabizi."
+        additional_instruction = f"{additional_instruction}\n{arabizi_confusion_instruction}"
     doc_text = doc["messages"][0]["content"]
-    return doc_text
+    return f"{additional_instruction}\n{doc_text}"
 
 
 def doc_to_target(doc):

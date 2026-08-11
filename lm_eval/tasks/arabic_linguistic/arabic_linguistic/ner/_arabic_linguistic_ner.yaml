@@ -1,0 +1,13 @@
+group: arabic_linguistic_ner
+group_alias: Arabic Linguistic - Named Entity Recognition
+task:
+  - arabic_linguistic_ner_ambiguous_surface_type
+  - arabic_linguistic_ner_boundary
+  - arabic_linguistic_ner_entity_type
+  - arabic_linguistic_ner_prefixed_entity
+  - arabic_linguistic_ner_sanity_entity_type
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0

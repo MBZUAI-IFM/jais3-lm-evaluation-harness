@@ -1,0 +1,10 @@
+include: ../_default_template_yaml
+task: ALP_arabic_diacritization_noun_adjective_ambiguity_gen
+task_alias: "ALP Arabic Diacritization - Noun vs Adjective_gen"
+dataset_kwargs:
+  data_filename: 
+    ./arabic_linguistic/ALP_arabic_diacritization/Arabic_Diacritization_Benchmark_ALP_1500_Reviewed.jsonl
+  category_value: noun_adjective_ambiguity
+metadata:
+  version: 1.0
+  category: noun_adjective_ambiguity

@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_historical_heritage_knowledge_gen
+task_alias: "Alyah - Historical & Heritage Knowledge_gen"
+metadata:
+  version: 1.0
+  category: "Historical & Heritage Knowledge"

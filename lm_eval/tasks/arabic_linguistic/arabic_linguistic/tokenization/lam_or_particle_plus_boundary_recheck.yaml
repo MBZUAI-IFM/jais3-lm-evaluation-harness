@@ -1,0 +1,11 @@
+include: ../_default_arabic_linguistic_filtered_template_yaml
+task: arabic_linguistic_tokenization_lam_or_particle_plus_boundary_recheck
+task_alias: "Tokenization - Lam or Particle Boundary Recheck"
+dataset_kwargs:
+  data_files:
+    test: ./arabic_linguistic/mcq_version/arabic_tokenization_mcq_benchmark.json
+  category_field: pattern
+  category_value: LAM_OR_PARTICLE_PLUS_BOUNDARY_RECHECK
+metadata:
+  version: 1.0
+  category: lam_or_particle_plus_boundary_recheck

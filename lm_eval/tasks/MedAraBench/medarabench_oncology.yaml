@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_oncology
+task_alias: "MedAraBench - Oncology"
+metadata:
+  version: 1.0
+  subset: "Oncology"

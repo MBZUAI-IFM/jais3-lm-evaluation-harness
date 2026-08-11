@@ -1,0 +1,15 @@
+group: alyah-emirati-benchmark
+group_alias: Alyah
+task:
+  - alyah_greetings_daily_expressions
+  - alyah_religious_social_sensitivity
+  - alyah_imagery_figurative_meaning
+  - alyah_etiquette_values
+  - alyah_poetry_creative_expression
+  - alyah_historical_heritage_knowledge
+  - alyah_language_dialect
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0
