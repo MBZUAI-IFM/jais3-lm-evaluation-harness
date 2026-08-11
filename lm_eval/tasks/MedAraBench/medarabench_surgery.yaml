@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_surgery
+task_alias: "MedAraBench - Surgery"
+metadata:
+  version: 1.0
+  subset: "Surgery"

@@ -1,0 +1,6 @@
+include: _default_alyah_template_yaml
+task: alyah_etiquette_values_gen
+task_alias: "Alyah - Etiquette & Values_gen"
+metadata:
+  version: 1.0
+  category: "Etiquette & Values"

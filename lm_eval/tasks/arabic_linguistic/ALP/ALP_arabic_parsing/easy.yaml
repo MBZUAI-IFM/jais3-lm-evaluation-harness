@@ -1,0 +1,9 @@
+include: ../_default_template_yaml
+task: ALP_arabic_parsing_easy
+task_alias: "ALP Arabic Parsing - Easy"
+dataset_kwargs:
+  data_filename: ./arabic_linguistic/ALP_arabic_parsing/Arabic_Parsing_Benchmark_ALP_1500_Reviewed.jsonl
+  category_value: Easy
+metadata:
+  version: 1.0
+  category: Easy

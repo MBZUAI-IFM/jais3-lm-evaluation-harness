@@ -2,7 +2,7 @@ task: arab_safety_regional
 dataset_path: json
 dataset_kwargs:
   data_files:
-    test: /lustre/scratch/shared-folders/jais-project/jais-3-evals/lm-evaluation-harness/lm_eval/tasks/arab_safety_regional/Regional_data_original.jsonl
+    test: ./arab_safety_regional_data/Regional_data_original.jsonl
 test_split: test
 process_docs: !function utils.process_docs
 output_type: generate_until

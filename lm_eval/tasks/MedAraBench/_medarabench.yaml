@@ -1,0 +1,34 @@
+group: medarabench
+group_alias: MedAraBench
+task:
+  - medarabench_anatomy
+  - medarabench_anesthesia
+  - medarabench_biochemistry
+  - medarabench_cardiology
+  - medarabench_cell_biology
+  - medarabench_chemistry
+  - medarabench_chest_diseases
+  - medarabench_embryology
+  - medarabench_emergency_medicine
+  - medarabench_gastroenterology
+  - medarabench_gastroenterology_hepatology
+  - medarabench_genetics
+  - medarabench_histology
+  - medarabench_histology_and_anatomy
+  - medarabench_histology_and_systemic_anatomy
+  - medarabench_microbiology
+  - medarabench_neurology
+  - medarabench_oncology
+  - medarabench_ophthalmology
+  - medarabench_pathology
+  - medarabench_pharmacology
+  - medarabench_physics
+  - medarabench_physiology
+  - medarabench_statistics
+  - medarabench_surgery
+  - medarabench_thorasic_internal
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0

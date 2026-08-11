@@ -44,14 +44,20 @@ def _extract_answer_from_response(response: str) -> str:
 
 
 def extract_answer(resps, docs):
-    def extract(resp):
-        response = resp[0] if resp else ""
+    def extract_one(response):
         if not isinstance(response, str):
             response = ""
         return _extract_answer_from_response(response)
 
-    return map(extract, resps)
+    def extract(resp):
+        # Case 1: resp is a list of responses for one document
+        if isinstance(resp, list):
+            return [extract_one(r) for r in resp]
 
+        # Case 2: resp is already a single string
+        return extract_one(resp)
+
+    return map(extract, resps)
 
 def parse_answer_with_verify(text):
     if text is None:
@@ -153,6 +159,33 @@ def aime_math_verify(predictions, references, **kwargs):
     reference = references[0] if references else ""
     return {"exact_match": int(compare_answers_with_verify(prediction, reference))}
 
+import math
+
+def estimate_pass_at_k(n, c, k):
+    if n - c < k:
+        return 1.0
+    return 1.0 - math.prod(
+        (n - c - i) / (n - i)
+        for i in range(k)
+    )
+
+
+def aime_math_pass_at_k(predictions, references, k=1, **kwargs):
+    reference = references[0] if references else ""
+    predictions = predictions[0] if predictions else ""
+    if isinstance(k, int):
+        k = [k]
+
+    n = len(predictions)
+    c = sum(
+        int(compare_answers_with_verify(prediction, reference))
+        for prediction in predictions
+    )
+    return {
+        f"pass@{kk}": estimate_pass_at_k(n, c, kk)
+        for kk in k
+        if kk <= n
+    }
 
 # string normalization from https://github.com/EleutherAI/lm-evaluation-harness/blob/master/lm_eval/tasks/hendrycks_math.py
 def is_equiv(str1, str2, verbose=False):

@@ -1,0 +1,15 @@
+group: ALP_arabic_diacritization_gen
+group_alias: ALP Arabic Diacritization_gen
+task:
+  - ALP_arabic_diacritization_unambiguous_control_gen
+  - ALP_arabic_diacritization_active_passive_voice_gen
+  - ALP_arabic_diacritization_verb_feature_ambiguity_gen
+  - ALP_arabic_diacritization_verb_vs_nominal_gen
+  - ALP_arabic_diacritization_imperative_vs_non_imperative_gen
+  - ALP_arabic_diacritization_noun_adjective_ambiguity_gen
+  - ALP_arabic_diacritization_particle_function_word_gen
+aggregate_metric_list:
+  - metric: acc_norm
+    weight_by_size: true
+metadata:
+  version: 1.0

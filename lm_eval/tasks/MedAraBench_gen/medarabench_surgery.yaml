@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_surgery_gen
+task_alias: "MedAraBench - Surgery_gen"
+metadata:
+  version: 1.0
+  subset: "Surgery"

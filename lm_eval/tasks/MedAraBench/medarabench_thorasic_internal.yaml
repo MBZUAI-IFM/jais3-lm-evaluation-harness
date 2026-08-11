@@ -1,0 +1,6 @@
+include: _default_medarabench_template_yaml
+task: medarabench_thorasic_internal
+task_alias: "MedAraBench - Thorasic Internal"
+metadata:
+  version: 1.0
+  subset: "Thorasic Internal"
