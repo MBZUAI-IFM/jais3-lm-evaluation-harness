@@ -8,12 +8,12 @@ test_split: train
 # LLM classifier. The walledai/HarmBench copyright config ships only {prompt, tags} with NO
 # reference text, so that exact metric cannot be reproduced here. We therefore score it like
 # the other HarmBench tasks — the automated refusal-string baseline below plus the
-# classifier-based COMPLIANCE proxy from judge_vllm.harmbench_scores (ASR = fraction the judge
-# marks as an instance of the behavior, i.e. the model complied rather than refused). Read the
-# copyright ASR as a refusal/compliance signal, not the official verbatim-match number.
-# Routing is automatic: the "harmbench" substring covers this task in judge_for_task /
-# judge_prompts.REGISTRY / judge_vllm.SCORERS. It has no context, so the standard (non-[CONTEXT])
-# classifier prompt is used.
+# judge-based COMPLIANCE proxy from safety_scorer (ASR = fraction the judge marks as an
+# instance of the behavior, i.e. the model complied rather than refused). Read the copyright
+# ASR as a refusal/compliance signal, not the official verbatim-match number: no LLM judge
+# measures verbatim reproduction, so this subset is the weakest of the three.
+# Routing is automatic: the "harmbench*" pattern covers this task in JUDGE_REGISTRY. It has
+# no context, so the standard (non-[CONTEXT]) rubric is used.
 output_type: generate_until
 doc_to_text: "{{prompt}}"
 doc_to_target: "{{prompt}}"

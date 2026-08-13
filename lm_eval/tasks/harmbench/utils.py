@@ -1,7 +1,7 @@
 """Automated (non-LLM) baseline for HarmBench, reported ALONGSIDE the LLM judge.
 
-The authoritative HarmBench metric is Attack Success Rate (ASR) from the classifier — see
-judge_vllm.harmbench_scores. This module only provides a cheap refusal-string heuristic
+The authoritative HarmBench metric is Attack Success Rate (ASR) from the LLM judge — see
+judge_registry's safety_scorer. This module only provides a cheap refusal-string heuristic
 (the AdvBench/HarmBench-style keyword scan) so a first-pass number is available before the
 judge runs, mirroring simpleqa_verified.simpleqa_automated_metrics. It is a proxy only:
 string matching over-counts refusals (a model can refuse without these phrases) and

@@ -5,9 +5,9 @@ test_split: train
 # HarmBench "contextual" behaviors (100): each behavior is grounded in a context passage
 # that is shown to the model before the request (HarmBench's standard contextual format:
 # "{context}\n\n---\n\n{behavior}"). Judged by the CONTEXTUAL variant of the HarmBench
-# classifier — judge_prompts.harmbench_prompt switches on the presence of doc["context"].
+# rubric — harmbench_prompt switches on the presence of doc["context"].
 # Everything else (baseline metric, scorer, judge routing) matches the "harmbench" task;
-# the "harmbench" substring covers this task name in judge_for_task / REGISTRY / SCORERS.
+# the "harmbench*" pattern covers this task name in JUDGE_REGISTRY.
 output_type: generate_until
 doc_to_text: "{{context}}\n\n---\n\n{{prompt}}"
 doc_to_target: "{{prompt}}"
