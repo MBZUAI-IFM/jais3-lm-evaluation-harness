@@ -1,0 +1,21 @@
+group: alghafa_native
+task:
+  - alghafa_native_mcq_exams
+  - alghafa_native_meta_ar_dialects
+  - alghafa_native_meta_ar_msa
+  - alghafa_native_facts_truefalse
+  - alghafa_native_soqal
+  - alghafa_native_xglue_mlqa
+  - alghafa_native_sentiment_no_neutral
+  - alghafa_native_rating_sentiment
+  - alghafa_native_sentiment
+aggregate_metric_list:
+  - metric: acc
+    aggregation: mean
+    weight_by_size: true
+  - metric: acc_norm
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  description: AlGhafa-Native (OALL) log-likelihood variant for base checkpoints
+  version: 1.0

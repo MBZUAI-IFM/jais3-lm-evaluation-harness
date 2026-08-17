@@ -1,0 +1,18 @@
+group: alghafa_native_gen
+task:
+  - alghafa_native_mcq_exams_gen
+  - alghafa_native_meta_ar_dialects_gen
+  - alghafa_native_meta_ar_msa_gen
+  - alghafa_native_facts_truefalse_gen
+  - alghafa_native_soqal_gen
+  - alghafa_native_xglue_mlqa_gen
+  - alghafa_native_sentiment_no_neutral_gen
+  - alghafa_native_rating_sentiment_gen
+  - alghafa_native_sentiment_gen
+aggregate_metric_list:
+  - metric: exact_match
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  description: AlGhafa-Native (OALL) generative variant for instruct/think checkpoints
+  version: 1.0
