@@ -1,0 +1,30 @@
+task: exams_ar
+# Arabic EXAMS (OALL/Arabic_EXAMS) — 537 native-Arabic school-exam MCQs across 5 subjects, one of
+# the suites behind the Open Arabic LLM Leaderboard. Log-likelihood variant for BASE checkpoints;
+# instruct/think use exams_ar_gen. Prompt reproduced verbatim from the official OALL task, and the
+# choices scored are the Arabic option LETTERS (أ/ب/ج/د), exactly as OALL scores it.
+dataset_path: parquet
+dataset_name: null
+dataset_kwargs:
+  data_files:
+    test: /jais3/data/jais_2/benchmarks/arabic_exams/test.parquet
+    validation: /jais3/data/jais_2/benchmarks/arabic_exams/validation.parquet
+test_split: test
+validation_split: validation
+output_type: multiple_choice
+process_docs: !function utils.process_docs
+doc_to_text: "{{query}}"
+doc_to_target: "{{gold}}"
+doc_to_choice: "choices"
+fewshot_split: validation
+fewshot_config:
+  sampler: first_n
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: acc_norm
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
