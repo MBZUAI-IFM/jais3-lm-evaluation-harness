@@ -1,0 +1,5 @@
+include: _default_aratrust_template_yaml
+task: aratrust_unfairness
+dataset_kwargs:
+  data_files:
+    train: /jais3/data/jais_2/benchmarks/aratrust/Unfairness_train.parquet
