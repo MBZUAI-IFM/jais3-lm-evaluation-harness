@@ -1,0 +1,28 @@
+# Shared template for the ABB subtasks. Each subtask is one file under
+# LOCAL_BENCHMARK_PATH/arabic_broad_benchmark/subtasks/, partitioned so that every question in a
+# subtask needs the SAME LLM-as-judge rubric -- that is what lets one judge call ask for exactly one
+# rubric (the official protocol) instead of one task branching over five of them.
+# Generation is faithful to the official abb_eval.py: single user turn, the instruction verbatim,
+# greedy. Scoring happens in judge_registry (`abb_*` entries -> abb_prompt + abb_scorer).
+dataset_path: json
+dataset_name: null
+test_split: test
+output_type: generate_until
+doc_to_text: "{{instruction}}"
+doc_to_target: "{{output}}"
+metric_list:
+  - metric: !function utils.abb_non_empty_rate
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 2.0

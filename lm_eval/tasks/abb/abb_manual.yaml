@@ -1,0 +1,5 @@
+include: _default_abb_template_yaml
+task: abb_manual
+dataset_kwargs:
+  data_files:
+    test: /jais3/data/jais_2/benchmarks/arabic_broad_benchmark/subtasks/abb_manual.jsonl

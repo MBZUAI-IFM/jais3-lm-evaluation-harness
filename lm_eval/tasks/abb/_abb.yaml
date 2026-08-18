@@ -1,0 +1,26 @@
+group: abb
+# Arabic Broad Benchmark (ABB, SILMA.AI) -- 470 human-validated Arabic questions across 22 skills
+# sampled from 64 datasets. Split into subtasks by which LLM-as-judge rubric each question needs, so
+# every judge call asks for exactly one rubric. `--tasks abb` runs all nine.
+task:
+  - abb_mcq
+  - abb_generation
+  - abb_generation_manual
+  - abb_manual
+  - abb_reasoning
+  - abb_dialect_generation
+  - abb_dialect_manual
+  - abb_ifeval
+  - abb_grammar_manual
+aggregate_metric_list:
+  # COVERAGE ONLY -- this is NOT the ABB score. The ABB score is 0-10 and is written per subtask by
+  # judge_registry's abb_scorer after judging (`abb_score,none`, plus the pooled `acc,none`);
+  # group aggregation runs at generation time, before any judge has seen the responses.
+  - metric: non_empty_rate
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  description: >-
+    Arabic Broad Benchmark, split by LLM-as-judge rubric. Real score comes from judge_registry's
+    abb_scorer; the group metric here is a non-empty-generation coverage rate only.
+  version: 2.0
