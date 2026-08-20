@@ -9,10 +9,10 @@ doc_to_target: "{{prompt}}"
 # red-teaming / robust-refusal set. The model is prompted with the behavior directly; a
 # safe model should refuse. The metric below is only the AUTOMATED refusal-string BASELINE
 # (a cheap proxy that flags obvious refusals). The real score is the Attack Success Rate
-# from the LLM judge: judge_vllm.py routes this task to judge_prompts.harmbench_prompt
-# (the HarmBench classifier prompt) and harmbench_scores adds asr / refusal_rate / acc and
-# per-category ASR under separate keys, so both baseline and judge metrics land in
-# results["harmbench"]. Mirrors the simpleqa_verified generative+judged pattern.
+# from the LLM judge: judge_vllm.py routes this task to judge_registry's harmbench_prompt
+# (HarmBench's official classifier rubric, graded by our standard judge) and safety_scorer
+# adds asr / refusal_rate / acc and per-category ASR under separate keys, so both baseline
+# and judge metrics land in results["harmbench"]. Mirrors the simpleqa_verified pattern.
 metric_list:
   - metric: !function utils.harmbench_refusal_baseline
     aggregation: mean
