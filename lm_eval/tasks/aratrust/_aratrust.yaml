@@ -1,0 +1,20 @@
+group: aratrust
+task:
+  - aratrust_trustfulness
+  - aratrust_mental_health
+  - aratrust_physical_health
+  - aratrust_offensive
+  - aratrust_ethics
+  - aratrust_privacy
+  - aratrust_unfairness
+  - aratrust_illegal
+aggregate_metric_list:
+  - metric: acc
+    aggregation: mean
+    weight_by_size: true
+  - metric: acc_norm
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  description: AraTrust (OALL v2) log-likelihood variant for base checkpoints
+  version: 1.0

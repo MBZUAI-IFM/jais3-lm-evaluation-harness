@@ -1,0 +1,17 @@
+group: aratrust_gen
+task:
+  - aratrust_trustfulness_gen
+  - aratrust_mental_health_gen
+  - aratrust_physical_health_gen
+  - aratrust_offensive_gen
+  - aratrust_ethics_gen
+  - aratrust_privacy_gen
+  - aratrust_unfairness_gen
+  - aratrust_illegal_gen
+aggregate_metric_list:
+  - metric: exact_match
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  description: AraTrust (OALL v2) generative variant for instruct/think checkpoints
+  version: 1.0
