@@ -1,0 +1,40 @@
+task: exams_ar_gen
+# Generative variant of Arabic EXAMS for INSTRUCT/THINK checkpoints: same official OALL prompt,
+# but the model is asked for the option letter inside [[ ]] so the answer is parseable. Scored by
+# the in-task exact_match on the extracted letter, then re-scored by the judge (the generic "*_gen"
+# JUDGE_REGISTRY entry: mcq_prompt + accuracy_scorer), which is the number that lands on the
+# dashboard. NOTE for thinking cells: quote the judged acc,none, not exact_match — the harness
+# empties resps when a thinking model emits no close tag, which the judge's reasoning fallback
+# recovers but a filter-based metric cannot.
+dataset_path: parquet
+dataset_name: null
+dataset_kwargs:
+  data_files:
+    test: /jais3/data/jais_2/benchmarks/arabic_exams/test.parquet
+    validation: /jais3/data/jais_2/benchmarks/arabic_exams/validation.parquet
+test_split: test
+output_type: generate_until
+doc_to_text: !function utils.doc_to_text
+doc_to_target: !function utils.doc_to_target
+process_docs: !function utils.add_options_with_text
+metric_list:
+  - metric: !function utils.exact_match_normalized_label
+    aggregation: mean
+    higher_is_better: true
+filter_list:
+  - name: extract_answer
+    filter:
+      - function: custom
+        filter_fn: !function utils.extract_bracketed_label
+generation_kwargs:
+  until:
+    - <end_of_turn>
+    - <eos>
+    - </s>
+    - <|end_of_text|>
+    - <|eot_id|>
+    - <|endoftext|>
+    - <|im_end|>
+  do_sample: false
+metadata:
+  version: 1.0
