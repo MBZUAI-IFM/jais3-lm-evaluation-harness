@@ -1,0 +1,6 @@
+include: _default_alghafa_native_template_yaml
+task: alghafa_native_mcq_exams
+dataset_kwargs:
+  data_files:
+    test: /jais3/data/jais_2/benchmarks/alghafa_native/mcq_exams_test_ar/test.parquet
+    validation: /jais3/data/jais_2/benchmarks/alghafa_native/mcq_exams_test_ar/validation.parquet

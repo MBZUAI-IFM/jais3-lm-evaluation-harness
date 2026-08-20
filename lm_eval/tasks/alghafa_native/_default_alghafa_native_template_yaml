@@ -1,0 +1,25 @@
+dataset_path: parquet
+dataset_name: null
+test_split: test
+validation_split: validation
+
+output_type: multiple_choice
+
+process_docs: !function utils.process_docs
+doc_to_text: "{{query}}"
+doc_to_target: "{{gold}}"
+doc_to_choice: "choices"
+
+fewshot_split: validation
+fewshot_config:
+  sampler: first_n
+
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+  - metric: acc_norm
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 1.0
