@@ -214,10 +214,91 @@ def test_dict_metric_uses_custom_aggregation():
     assert agg_metrics["pass@3,none"] == 1.5
 
 
+def _check_corpus_metric_aggregation(metric, scorer_name, scorer_kwargs):
+    """Keep reference/prediction pairs through scoring and cap expensive bootstraps."""
+    from collections import defaultdict
+
+    from lm_eval.api.registry import (
+        get_metric,
+        get_metric_aggregation,
+        is_higher_better,
+    )
+    from lm_eval.evaluator_utils import _compute_task_aggregations
+
+    task = MockConfigurableTask()
+    task.OUTPUT_TYPE = "generate_until"
+    task._config.doc_to_choice = None
+    task.doc_to_target = lambda doc: doc["target"]
+    task._metric_fn_list = {metric: get_metric(metric)}
+    task._metric_fn_kwargs = {metric: {}}
+    task._aggregation_list = {metric: get_metric_aggregation(metric)}
+    references = ["هذه جملة مرجعية أولى", "هذه جملة مرجعية ثانية"]
+    predictions = ["هذه ترجمة أولى", "هذه ترجمة ثانية"]
+    raw_metrics = defaultdict(list)
+    for reference, prediction in zip(references, predictions):
+        result = task.process_results({"target": reference}, [prediction])
+        raw_metrics[(metric, "none")].append(result[metric])
+
+    # Avoid downloading the tokenizer in unit tests, while exercising the real
+    # registry, task processing, reference formatting, and stderr dispatch.
+    with (
+        mock.patch(f"lm_eval.api.metrics.sacrebleu.{scorer_name}") as scorer,
+        mock.patch("lm_eval.api.metrics.bootstrap_stderr", return_value=1.5) as stderr,
+    ):
+        scorer.return_value.score = 42.0
+        aggregated, sample_count = _compute_task_aggregations(
+            task, raw_metrics, bootstrap_iters=100000
+        )
+
+    assert sample_count == 2
+    assert aggregated == {f"{metric},none": 42.0, f"{metric}_stderr,none": 1.5}
+    assert is_higher_better(metric) is True
+    scorer.assert_called_once_with(
+        tuple(predictions), [tuple(references)], **scorer_kwargs
+    )
+    stderr.assert_called_once_with(
+        get_metric_aggregation(metric),
+        [[ref, pred] for ref, pred in zip(references, predictions)],
+        iters=100,
+    )
+
+
+def test_spbleu_task_aggregation():
+    _check_corpus_metric_aggregation("spbleu", "corpus_bleu", {"tokenize": "flores200"})
+
+
+def test_chrfpp_task_aggregation():
+    _check_corpus_metric_aggregation("chrfpp", "corpus_chrf", {"word_order": 2})
+
+
+def test_chrfpp_includes_word_matches():
+    """Word boundaries must affect chrF++ even when character streams match."""
+    import math
+
+    import sacrebleu
+
+    from lm_eval.api.metrics import chrf, chrfpp
+
+    reference = "the cat is sitting on the mat"
+    prediction = "thecat is sitting on the mat"
+    items = [(reference, prediction)]
+    assert math.isclose(chrf(items), 100.0)
+    assert 0.0 < chrfpp(items) < 100.0
+    assert math.isclose(
+        chrfpp(items),
+        sacrebleu.corpus_chrf([prediction], [[reference]], word_order=2).score,
+    )
+    assert math.isclose(chrfpp([(reference, reference)]), 100.0)
+    assert math.isclose(chrfpp([([reference, prediction], prediction)]), 100.0)
+
+
 if __name__ == "__main__":
     test_acc_mutual_info_slicing()
     test_acc_mutual_info_different_predictions()
     test_acc_mutual_info_without_metric()
     test_bootstrap_internal_no_mp()
     test_dict_metric_uses_custom_aggregation()
+    test_spbleu_task_aggregation()
+    test_chrfpp_task_aggregation()
+    test_chrfpp_includes_word_matches()
     print("All tests passed!")

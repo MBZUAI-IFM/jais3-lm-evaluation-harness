@@ -8,8 +8,14 @@ metric_list:
   - metric: bleu
     aggregation: bleu
     higher_is_better: true
+  - metric: spbleu
+    aggregation: spbleu
+    higher_is_better: true
   - metric: chrf
     aggregation: chrf
+    higher_is_better: true
+  - metric: chrfpp
+    aggregation: chrfpp
     higher_is_better: true
   # - metric: ter
     # aggregation: ter
