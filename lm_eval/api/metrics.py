@@ -98,10 +98,19 @@ def bleu(items):
     return sacrebleu.corpus_bleu(preds, refs).score
 
 
+@register_aggregation("spbleu")
+def spbleu(items):
+    """Corpus BLEU using the FLORES-200 SentencePiece tokenizer (0–100)."""
+    refs = list(zip(*items))[0]
+    preds = list(zip(*items))[1]
+    refs, preds = _sacreformat(refs, preds)
+    return sacrebleu.corpus_bleu(preds, refs, tokenize="flores200").score
+
+
 @register_aggregation("chrf")
 def chrf(items):
-    """chrF++ is a tool for automatic evaluation of machine translation output
-    based on character n-gram precision and recall enhanced with word n-grams.
+    """chrF is a tool for automatic evaluation of machine translation output
+    based on character n-gram precision and recall.
     Source: https://github.com/m-popovic/chrF
     Paper: https://www.aclweb.org/anthology/W15-3049.pdf
 
@@ -111,6 +120,15 @@ def chrf(items):
     preds = list(zip(*items))[1]
     refs, preds = _sacreformat(refs, preds)
     return sacrebleu.corpus_chrf(preds, refs).score
+
+
+@register_aggregation("chrfpp")
+def chrfpp(items):
+    """Corpus chrF++ with character 1–6-grams and word 1–2-grams (0–100)."""
+    refs = list(zip(*items))[0]
+    preds = list(zip(*items))[1]
+    refs, preds = _sacreformat(refs, preds)
+    return sacrebleu.corpus_chrf(preds, refs, word_order=2).score
 
 
 @register_aggregation("ter")
@@ -360,12 +378,32 @@ def bleu_fn(items):  # This is a passthrough function
 
 
 @register_metric(
+    metric="spbleu",
+    higher_is_better=True,
+    output_type="generate_until",
+    aggregation="spbleu",
+)
+def spbleu_fn(items):  # This is a passthrough function
+    return items
+
+
+@register_metric(
     metric="chrf",
     higher_is_better=True,
     output_type="generate_until",
     aggregation="chrf",
 )
 def chrf_fn(items):  # This is a passthrough function
+    return items
+
+
+@register_metric(
+    metric="chrfpp",
+    higher_is_better=True,
+    output_type="generate_until",
+    aggregation="chrfpp",
+)
+def chrfpp_fn(items):  # This is a passthrough function
     return items
 
 
@@ -574,7 +612,9 @@ def stderr_for_metric(
         f1_score,
         perplexity,
         bleu,
+        spbleu,
         chrf,
+        chrfpp,
         ter,
         nanmean,
     ]

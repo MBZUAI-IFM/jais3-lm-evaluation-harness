@@ -9,6 +9,12 @@ aggregate_metric_list:
   - metric: bleu
     aggregation: mean
     weight_by_size: true
+  - metric: spbleu
+    aggregation: mean
+    weight_by_size: true
+  - metric: chrfpp
+    aggregation: mean
+    weight_by_size: true
 
 
 metadata:

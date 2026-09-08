@@ -22,6 +22,12 @@ metric_list:
   - metric: bleu
     aggregation: bleu
     higher_is_better: true
+  - metric: spbleu
+    aggregation: spbleu
+    higher_is_better: true
+  - metric: chrfpp
+    aggregation: chrfpp
+    higher_is_better: true
 
 metadata:
   version: 0.0

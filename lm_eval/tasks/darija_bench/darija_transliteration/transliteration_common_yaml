@@ -5,8 +5,10 @@ doc_to_target: !function utils.doc_to_target
 test_split: transliteration
 metric_list:
   - metric: bleu
+  - metric: spbleu
   # - metric: ter
   - metric: chrf
+  - metric: chrfpp
   # - metric: !function utils.bert
 generation_kwargs:
   until:
