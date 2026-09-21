@@ -205,8 +205,34 @@ class VLLM(TemplateLM):
             if isinstance(batch_size, str) and "auto" in batch_size
             else int(batch_size)
         )
+        # special_model_patterns = [
+        #     "minimax",
+        #     "nemotron-3-ultra",
+        #     "qwen3.8-flash-next",
+        #     "muse-glimmer",
+        #     "k2-horizon-mova-36b-a4b-mid_4",
+        #     "36bmovacv5c166_sft_reasoningv9.5.2_ftpo_es035_checkpoint_9804_to_hf",
+        #     "k2-horizon",
+        #     "/jais3/checkpoints/jais3_experiments/sft/A13/A13cs_A13x1-1Bcv5c189_sft_reasoningv9.5.2k2horCT_FTPO_es035/checkpoint_10711_to_hf",
+        #     "/jais3/checkpoints/jais3_experiments/sft/A13/A13cs_A13x1-4Bc10248_sft_reasoningv9.5.1k2horCT_FTPO_es035/checkpoint_9754_to_hf",
+        # ]
+        # pretrained_lower = pretrained.lower()
+
         if self.data_parallel_size <= 1:
-            self.model = LLM(**self.model_args)  # type: ignore[invalid-argument-type]
+            # if any(pattern.lower() in pretrained_lower for pattern in special_model_patterns):
+            #     eval_logger.warning(
+            #         "Muse-Glimmer vLLM doesn't support swap_space argument. Removing swap_space from model_args."
+            #     )
+            #     self.model_args.pop("swap_space", None)
+            try:
+                self.model = LLM(**self.model_args)  # type: ignore[invalid-argument-type]
+            except TypeError as e:
+                if "unexpected keyword argument 'swap_space'" in str(e):
+                    print(f"Warning: {e}")
+                    self.model_args.pop("swap_space", None)
+                    self.model = LLM(**self.model_args)
+                else:
+                    raise
         else:
             eval_logger.warning(
                 "You might experience occasional issues with model weight downloading when data_parallel is in use. To ensure stable performance, run with data_parallel_size=1 until the weights are downloaded and cached."
