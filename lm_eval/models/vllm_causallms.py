@@ -996,6 +996,9 @@ class VLLM(TemplateLM):
         until = handle_stop_sequences(
             _gen_kwargs.pop("until", None), eos=eos[0] if isinstance(eos, list) else eos
         )
+        # Cohere/aya models emit <|END_RESPONSE|> right before their EOS; fix:
+        if "<|END_RESPONSE|>" not in until:
+            until.append("<|END_RESPONSE|>")
 
         # Extract max_tokens
         max_gen_toks = int(_gen_kwargs.pop("max_gen_toks", default_max_gen_toks))
