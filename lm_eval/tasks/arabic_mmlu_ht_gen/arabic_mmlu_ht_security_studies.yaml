@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_security_studies_gen
+task_alias: "Arabic MMLU-HT - Security Studies_gen"
+dataset_name: security_studies

@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_jurisprudence_gen
+task_alias: "Arabic MMLU-HT - Jurisprudence_gen"
+dataset_name: jurisprudence

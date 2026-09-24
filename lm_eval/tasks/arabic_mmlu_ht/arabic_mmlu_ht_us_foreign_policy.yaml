@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_us_foreign_policy
+task_alias: "Arabic MMLU-HT - Us Foreign Policy"
+dataset_name: us_foreign_policy

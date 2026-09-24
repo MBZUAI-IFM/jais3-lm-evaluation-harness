@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_philosophy_gen
+task_alias: "Arabic MMLU-HT - Philosophy_gen"
+dataset_name: philosophy

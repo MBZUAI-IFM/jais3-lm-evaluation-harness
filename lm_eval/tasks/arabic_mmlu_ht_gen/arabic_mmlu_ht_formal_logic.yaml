@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_formal_logic_gen
+task_alias: "Arabic MMLU-HT - Formal Logic_gen"
+dataset_name: formal_logic

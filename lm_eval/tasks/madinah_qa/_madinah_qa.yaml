@@ -1,0 +1,11 @@
+group: madinah_qa
+group_alias: MadinahQA
+task:
+  - madinah_qa_general
+  - madinah_qa_grammar
+aggregate_metric_list:
+  - metric: acc_norm
+    aggregation: mean
+    weight_by_size: true
+metadata:
+  version: 1.0

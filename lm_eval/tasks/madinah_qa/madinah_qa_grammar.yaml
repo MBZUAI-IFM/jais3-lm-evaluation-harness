@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: madinah_qa_grammar
+task_alias: "MadinahQA - Arabic Language (Grammar)"
+dataset_name: "Arabic Language (Grammar)"

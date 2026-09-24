@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_management
+task_alias: "Arabic MMLU-HT - Management"
+dataset_name: management

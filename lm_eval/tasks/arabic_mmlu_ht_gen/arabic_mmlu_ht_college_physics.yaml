@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_college_physics_gen
+task_alias: "Arabic MMLU-HT - College Physics_gen"
+dataset_name: college_physics

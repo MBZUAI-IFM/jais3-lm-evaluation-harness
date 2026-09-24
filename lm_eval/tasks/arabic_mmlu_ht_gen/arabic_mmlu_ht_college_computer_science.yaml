@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_college_computer_science_gen
+task_alias: "Arabic MMLU-HT - College Computer Science_gen"
+dataset_name: college_computer_science

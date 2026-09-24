@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_prehistory
+task_alias: "Arabic MMLU-HT - Prehistory"
+dataset_name: prehistory

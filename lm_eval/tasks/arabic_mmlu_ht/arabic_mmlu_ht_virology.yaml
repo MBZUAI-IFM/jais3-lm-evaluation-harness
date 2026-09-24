@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_virology
+task_alias: "Arabic MMLU-HT - Virology"
+dataset_name: virology

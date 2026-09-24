@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_logical_fallacies_gen
+task_alias: "Arabic MMLU-HT - Logical Fallacies_gen"
+dataset_name: logical_fallacies

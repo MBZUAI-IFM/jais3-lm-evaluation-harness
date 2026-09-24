@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_nutrition_gen
+task_alias: "Arabic MMLU-HT - Nutrition_gen"
+dataset_name: nutrition

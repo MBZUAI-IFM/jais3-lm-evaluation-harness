@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_conceptual_physics
+task_alias: "Arabic MMLU-HT - Conceptual Physics"
+dataset_name: conceptual_physics

@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_public_relations_gen
+task_alias: "Arabic MMLU-HT - Public Relations_gen"
+dataset_name: public_relations

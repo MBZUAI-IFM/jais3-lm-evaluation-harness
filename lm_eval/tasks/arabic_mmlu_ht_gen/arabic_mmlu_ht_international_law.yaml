@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_international_law_gen
+task_alias: "Arabic MMLU-HT - International Law_gen"
+dataset_name: international_law

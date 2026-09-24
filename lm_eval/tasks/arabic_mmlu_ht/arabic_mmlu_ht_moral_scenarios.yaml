@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_moral_scenarios
+task_alias: "Arabic MMLU-HT - Moral Scenarios"
+dataset_name: moral_scenarios

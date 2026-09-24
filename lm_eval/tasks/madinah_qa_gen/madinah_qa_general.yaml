@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: madinah_qa_general_gen
+task_alias: "MadinahQA - Arabic Language (General)_gen"
+dataset_name: "Arabic Language (General)"

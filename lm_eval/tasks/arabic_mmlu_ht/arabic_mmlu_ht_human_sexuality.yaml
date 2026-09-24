@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_human_sexuality
+task_alias: "Arabic MMLU-HT - Human Sexuality"
+dataset_name: human_sexuality

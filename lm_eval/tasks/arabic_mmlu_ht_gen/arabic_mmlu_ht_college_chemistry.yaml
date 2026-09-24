@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_college_chemistry_gen
+task_alias: "Arabic MMLU-HT - College Chemistry_gen"
+dataset_name: college_chemistry

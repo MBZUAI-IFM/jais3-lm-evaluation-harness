@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_college_biology
+task_alias: "Arabic MMLU-HT - College Biology"
+dataset_name: college_biology

@@ -91,7 +91,41 @@ def doc_to_choice(doc):
 
 
 def doc_to_target(doc):
-    return doc["answer"]
+    letters = _choice_letters(doc)
+    answer = doc.get("answer")
+
+    # NER provides the correct label explicitly.
+    if doc.get("answer_letter") is not None:
+        target = str(doc["answer_letter"]).strip().upper()
+
+    # Most morphological and tokenization tasks already store A/B/C/D.
+    elif isinstance(answer, str) and answer.strip().upper() in letters:
+        target = answer.strip().upper()
+
+    # Use an explicit zero-based answer index when available.
+    elif doc.get("answer_idx") is not None:
+        target = letters[int(doc["answer_idx"])]
+
+    # Rhetoric stores the answer as a zero-based integer.
+    elif isinstance(answer, int):
+        target = letters[answer]
+
+    # Fallback for datasets storing the correct option text.
+    else:
+        options = _options(doc)
+        try:
+            target = letters[options.index(answer)]
+        except ValueError as exc:
+            raise ValueError(
+                f"Cannot map answer {answer!r} to an option label."
+            ) from exc
+
+    if target not in letters:
+        raise ValueError(
+            f"Invalid target label {target!r}; expected one of {letters!r}."
+        )
+
+    return target
 
 
 import re

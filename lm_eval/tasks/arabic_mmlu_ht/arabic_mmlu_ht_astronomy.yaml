@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_astronomy
+task_alias: "Arabic MMLU-HT - Astronomy"
+dataset_name: astronomy

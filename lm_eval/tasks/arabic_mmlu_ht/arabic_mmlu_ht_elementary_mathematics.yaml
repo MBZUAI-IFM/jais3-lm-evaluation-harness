@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_elementary_mathematics
+task_alias: "Arabic MMLU-HT - Elementary Mathematics"
+dataset_name: elementary_mathematics

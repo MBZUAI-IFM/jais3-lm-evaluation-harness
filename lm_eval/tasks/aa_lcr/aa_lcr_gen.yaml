@@ -1,4 +1,4 @@
 include: _aa_lcr_common_yaml
 tag:
   - aa_lcr_tasks
-task: aa_lcr_gen
+task: aa_lcr_v1.1_en

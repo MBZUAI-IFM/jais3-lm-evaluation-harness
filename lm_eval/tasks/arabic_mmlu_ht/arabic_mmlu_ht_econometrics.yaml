@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_econometrics
+task_alias: "Arabic MMLU-HT - Econometrics"
+dataset_name: econometrics

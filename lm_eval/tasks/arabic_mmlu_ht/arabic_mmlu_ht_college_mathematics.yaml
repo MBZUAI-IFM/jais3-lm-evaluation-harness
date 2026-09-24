@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_college_mathematics
+task_alias: "Arabic MMLU-HT - College Mathematics"
+dataset_name: college_mathematics

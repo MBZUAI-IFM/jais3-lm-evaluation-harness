@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_human_aging_gen
+task_alias: "Arabic MMLU-HT - Human Aging_gen"
+dataset_name: human_aging

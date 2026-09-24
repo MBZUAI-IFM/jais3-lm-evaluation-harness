@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_college_medicine
+task_alias: "Arabic MMLU-HT - College Medicine"
+dataset_name: college_medicine

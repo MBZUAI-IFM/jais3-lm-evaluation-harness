@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_professional_law
+task_alias: "Arabic MMLU-HT - Professional Law"
+dataset_name: professional_law

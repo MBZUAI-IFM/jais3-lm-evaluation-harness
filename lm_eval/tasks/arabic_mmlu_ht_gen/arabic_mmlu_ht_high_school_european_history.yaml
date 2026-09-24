@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_high_school_european_history_gen
+task_alias: "Arabic MMLU-HT - High School European History_gen"
+dataset_name: high_school_european_history

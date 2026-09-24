@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_high_school_world_history
+task_alias: "Arabic MMLU-HT - High School World History"
+dataset_name: high_school_world_history

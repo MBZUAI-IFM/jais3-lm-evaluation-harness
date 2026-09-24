@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_business_ethics
+task_alias: "Arabic MMLU-HT - Business Ethics"
+dataset_name: business_ethics

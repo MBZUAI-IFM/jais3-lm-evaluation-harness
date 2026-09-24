@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_miscellaneous
+task_alias: "Arabic MMLU-HT - Miscellaneous"
+dataset_name: miscellaneous

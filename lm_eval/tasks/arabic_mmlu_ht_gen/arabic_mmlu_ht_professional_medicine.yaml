@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_professional_medicine_gen
+task_alias: "Arabic MMLU-HT - Professional Medicine_gen"
+dataset_name: professional_medicine

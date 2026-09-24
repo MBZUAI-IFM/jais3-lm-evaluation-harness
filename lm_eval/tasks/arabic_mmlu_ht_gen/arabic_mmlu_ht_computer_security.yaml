@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_computer_security_gen
+task_alias: "Arabic MMLU-HT - Computer Security_gen"
+dataset_name: computer_security

@@ -1,15 +1,9 @@
-task: arabic_finance_helm_calculation_gen
-tag:
-  - arabic_finance_helm_tasks
-dataset_path: stanford-crfm/arabic-enterprise
-dataset_name: finance
-dataset_kwargs:
-  revision: 35e114eda2e3450e0e69cf6bda9d3a2f54bf6f26
+custom_dataset: !function utils.load_dataset
 test_split: test
 output_type: generate_until
-process_docs: !function utils.process_docs_calcu
+process_docs: !function utils.process_docs
 doc_to_text: "{{input}}"
-doc_to_target: "{{ground_truth_ar}}"
+doc_to_target: gold_answer
 metric_list:
   - metric: !function utils.placeholder_metric
     aggregation: mean

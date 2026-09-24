@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_high_school_government_and_politics
+task_alias: "Arabic MMLU-HT - High School Government And Politics"
+dataset_name: high_school_government_and_politics

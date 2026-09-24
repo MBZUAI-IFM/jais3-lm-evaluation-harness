@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_global_facts
+task_alias: "Arabic MMLU-HT - Global Facts"
+dataset_name: global_facts

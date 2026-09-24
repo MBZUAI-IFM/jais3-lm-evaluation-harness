@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_medical_genetics_gen
+task_alias: "Arabic MMLU-HT - Medical Genetics_gen"
+dataset_name: medical_genetics

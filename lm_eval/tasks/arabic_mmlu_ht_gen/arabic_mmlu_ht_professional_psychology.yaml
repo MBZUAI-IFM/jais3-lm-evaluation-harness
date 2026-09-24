@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_professional_psychology_gen
+task_alias: "Arabic MMLU-HT - Professional Psychology_gen"
+dataset_name: professional_psychology

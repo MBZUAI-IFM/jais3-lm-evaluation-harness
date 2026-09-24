@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_electrical_engineering_gen
+task_alias: "Arabic MMLU-HT - Electrical Engineering_gen"
+dataset_name: electrical_engineering

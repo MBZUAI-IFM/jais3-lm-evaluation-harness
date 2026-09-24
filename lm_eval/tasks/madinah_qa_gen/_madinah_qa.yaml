@@ -1,0 +1,10 @@
+group: madinah_qa_gen
+group_alias: MadinahQA_gen
+task:
+  - madinah_qa_general_gen
+  - madinah_qa_grammar_gen
+aggregate_metric_list:
+  - metric: exact_match
+    weight_by_size: true
+metadata:
+  version: 1.0

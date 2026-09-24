@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_abstract_algebra
+task_alias: "Arabic MMLU-HT - Abstract Algebra"
+dataset_name: abstract_algebra

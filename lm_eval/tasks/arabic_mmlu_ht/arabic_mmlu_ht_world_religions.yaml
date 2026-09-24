@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_world_religions
+task_alias: "Arabic MMLU-HT - World Religions"
+dataset_name: world_religions

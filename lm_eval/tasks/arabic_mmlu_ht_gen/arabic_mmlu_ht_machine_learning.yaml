@@ -1,0 +1,4 @@
+include: _default_template_yaml
+task: arabic_mmlu_ht_machine_learning_gen
+task_alias: "Arabic MMLU-HT - Machine Learning_gen"
+dataset_name: machine_learning

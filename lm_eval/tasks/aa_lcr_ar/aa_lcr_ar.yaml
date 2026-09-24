@@ -1,0 +1,4 @@
+include: _aa_lcr_ar_common_yaml
+tag:
+  - aa_lcr_ar_tasks
+task: aa_lcr_v1.1_ar
