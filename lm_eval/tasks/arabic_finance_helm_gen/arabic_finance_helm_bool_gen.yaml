@@ -1,10 +1,8 @@
 task: arabic_finance_helm_bool_gen
 tag:
   - arabic_finance_helm_gen_tasks
-dataset_path: stanford-crfm/arabic-enterprise
+dataset_path: IFM/arabic-enterprise_verified
 dataset_name: finance
-dataset_kwargs:
-  revision: 35e114eda2e3450e0e69cf6bda9d3a2f54bf6f26
 test_split: test
 output_type: generate_until
 process_docs: !function utils.process_docs_bool_gen

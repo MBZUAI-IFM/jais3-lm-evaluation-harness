@@ -1,5 +1,5 @@
 task: AraDiCE_syria_cultural_gen
-dataset_path: QCRI/AraDiCE-Culture
+dataset_path: IFM/AraDiCE-Culture_verified
 dataset_name: Syria
 training_split:
 validation_split:

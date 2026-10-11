@@ -1,9 +1,5 @@
-dataset_kwargs:
-  data_files:
-    test:
-    - poetry/50_verses/analysis_poem_text___keywords.json
-dataset_name: null
-dataset_path: json
+dataset_path: IFM/FannOrFlop-Poetry_verified
+dataset_name: poem_text__keywords
 include: _default_poetry_analysis_template_yaml
 tag: poem_text__keywords_task
 task: poem_text__keywords

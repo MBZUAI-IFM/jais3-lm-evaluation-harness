@@ -9,7 +9,7 @@ def load_medarabench_subset(**kwargs):
     if subset is None:
         raise ValueError("MedAraBench subset must be provided in task metadata.")
 
-    dataset = datasets.load_dataset("qimma/MCQ_MedAraBench", subset)
+    dataset = datasets.load_dataset("IFM/MCQ_MedAraBench_verified", subset)
     return {"test": dataset["test"]}
 
 

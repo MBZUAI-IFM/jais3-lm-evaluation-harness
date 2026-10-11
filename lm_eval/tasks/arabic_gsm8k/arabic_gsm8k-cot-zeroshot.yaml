@@ -2,7 +2,7 @@ tag:
   - math_word_problems
 task: arabic_gsm8k_cot_zeroshot
 # dataset_name: main_test
-dataset_path: Omartificial-Intelligence-Space/Arabic-gsm8k
+dataset_path: IFM/Arabic-gsm8k_verified
 output_type: generate_until
 training_split: main_train
 fewshot_split: main_train

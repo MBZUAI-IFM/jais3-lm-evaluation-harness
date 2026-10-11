@@ -1,8 +1,5 @@
-dataset_kwargs:
-  data_files:
-    test: ./flores/devtest.csv
-dataset_path: csv
-dataset_name: null
+# FLORES+ devtest (openlanguagedata/flores_plus, gated) pivoted to one row per id by utils.py
+custom_dataset: !function utils.load_flores_devtest
 test_split: test
 
 output_type: generate_until

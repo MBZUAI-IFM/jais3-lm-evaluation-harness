@@ -1,9 +1,6 @@
+dataset_path: IFM/PalmX2025-Subtask2_verified
+dataset_name: default
 task: islamic_qa_palmX2025_2
-dataset_path: json
-dataset_name: null
-dataset_kwargs:
-  data_files:
-    test: islamic_qa_benchmarks/PalmX2025/subtask_2.json
 test_split: test
 
 output_type: multiple_choice

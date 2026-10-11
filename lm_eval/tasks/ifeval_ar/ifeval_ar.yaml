@@ -1,13 +1,14 @@
-# Arabic IFEval (inceptionai/Arabic_IFEval) — 404 Arabic instruction-following prompts,
+# Arabic IFEval (inception42/Arabic-IFEval, formerly inceptionai/Arabic_IFEval) — 404 Arabic instruction-following prompts,
 # verifiable/programmatic (NO LLM judge). 23 instruction types; scored by
-# utils.process_results via the Arabic instruction registry. Data staged locally
-# (offline runs); ABSOLUTE data_files path so it resolves under the sbatch cwd (=LOCAL_BENCHMARK_PATH).
+# utils.process_results via the Arabic instruction registry. Read from the Hugging Face repo, pinned
+# to the commit verified byte-identical to the former local copy.
 task: ifeval_ar
-dataset_path: json
+dataset_path: inception42/Arabic-IFEval
 dataset_name: null
 dataset_kwargs:
+  revision: 48f209003f5c90055248d11b8f0e4ffd4162cb87
   data_files:
-    test: ./arabic_ifeval/ar_ifeval.jsonl
+    test: ar_IFEval.jsonl
 output_type: generate_until
 test_split: test
 num_fewshot: 0

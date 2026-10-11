@@ -1,5 +1,5 @@
 # dataset_name: main_test
-dataset_path: Omartificial-Intelligence-Space/Arabic-gsm8k
+dataset_path: IFM/Arabic-gsm8k_verified
 doc_to_target: '{{answer.split(''####'')[-1].strip() if answer is defined else target}}'
 doc_to_text: 'السؤال: {{question}}
 

@@ -1,4 +1,4 @@
-dataset_path: MBZUAI/Dialectal-Arabic-MMLU
+dataset_path: IFM/Dialectal-Arabic-MMLU_verified
 test_split: test
 output_type: generate_until
 doc_to_text: !function utils.doc_to_text

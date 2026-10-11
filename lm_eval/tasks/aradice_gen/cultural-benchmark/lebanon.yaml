@@ -1,5 +1,5 @@
 task: AraDiCE_lebanon_cultural_gen
-dataset_path: QCRI/AraDiCE-Culture
+dataset_path: IFM/AraDiCE-Culture_verified
 dataset_name: Lebanon
 training_split:
 validation_split:

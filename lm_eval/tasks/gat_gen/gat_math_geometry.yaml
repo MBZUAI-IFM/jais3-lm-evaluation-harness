@@ -1,10 +1,5 @@
-dataset_kwargs:
-  data_files:
-    test:
-      - GAT/GATmath/geometry.json
-dataset_name:
-dataset_path: json
-
+dataset_path: IFM/GATmath_verified
+dataset_name: geometry
 include: _default_gat_template_yaml
 task: gat_math_geometry_gen
 test_split: test

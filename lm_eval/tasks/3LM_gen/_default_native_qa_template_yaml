@@ -10,7 +10,7 @@ filter_list:
     filter:
       - function: custom
         filter_fn: !function utils.extract_bracketed_label
-dataset_path: tiiuae/NativeQA
+dataset_path: IFM/NativeQA_verified
 
 doc_to_text: !function utils.doc_to_text_native
 doc_to_target: !function utils.doc_to_target

@@ -1,10 +1,5 @@
-dataset_kwargs:
-  data_files:
-    test:
-      - GAT/GATmath/arithmetic.json
-dataset_name: null
-dataset_path: json
-
+dataset_path: IFM/GATmath_verified
+dataset_name: arithmetic
 include: _default_gat_template_yaml
 task: gat_math_arithmetic
 test_split: test

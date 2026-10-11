@@ -1,9 +1,5 @@
-dataset_kwargs:
-  data_files:
-    test:
-    - poetry/50_verses/analysis_poem_text___meter.json
-dataset_name: null
-dataset_path: json
+dataset_path: IFM/FannOrFlop-Poetry_verified
+dataset_name: poem_text__meter
 include: _default_poetry_analysis_template_yaml
 tag: poem_text__meter_task
 task: poem_text__meter

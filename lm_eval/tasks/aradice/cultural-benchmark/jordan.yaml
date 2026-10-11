@@ -1,5 +1,5 @@
 task: AraDiCE_jordan_cultural
-dataset_path: QCRI/AraDiCE-Culture
+dataset_path: IFM/AraDiCE-Culture_verified
 dataset_name: Jordan
 training_split: null
 validation_split: null
