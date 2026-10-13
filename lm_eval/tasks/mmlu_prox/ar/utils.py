@@ -50,8 +50,16 @@ doc_to_text = partial(format_cot_example, including_answer=False)
 fewshot_to_text = partial(format_cot_example, including_answer=True)
 
 
+def add_options_with_text(doc):
+    opts = [(choices[i], doc[f"option_{i}"]) for i in range(max_opt_num) if doc[f"option_{i}"] is not None]
+    doc["options"] = [opt for _, opt in opts]
+    doc["options_with_text"] = "\n".join(f"{letter}. {opt.strip()}" for letter, opt in opts)
+    return doc
+
+
 def process_docs(dataset, subject):
-    return dataset.filter(lambda x: x["category"] == subject)
+    dataset = dataset.filter(lambda x: x["category"] == subject)
+    return dataset.map(add_options_with_text)
 
 
 process_biology = partial(process_docs, subject="biology")
