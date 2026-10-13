@@ -37,7 +37,7 @@ from io import BytesIO
 
 from lm_eval import utils
 from lm_eval.api.instance import Instance
-from lm_eval.api.model import TemplateLM
+from lm_eval.api.model import GenerationWithMetadata, TemplateLM
 from lm_eval.models.utils import Collator, chunks, configure_pad_token
 
 
@@ -309,6 +309,13 @@ class TemplateAPI(TemplateLM):
         """Method used to parse the generations from the (batched) API response. This method should return a list of str"""
         raise NotImplementedError
 
+    @staticmethod
+    def parse_generation_metadata(
+        outputs: Union[Any, List[Any]], **kwargs
+    ) -> Optional[List[dict[str, Any]]]:
+        """Return optional metadata aligned one-to-one with parsed generations."""
+        return None
+
     @cached_property
     def api_key(self) -> str:
         """Override this property to return the API key for the API request."""
@@ -536,6 +543,22 @@ class TemplateAPI(TemplateLM):
                     ctxlens=ctxlens,
                 )
             )
+            if generate:
+                generation_metadata = self.parse_generation_metadata(
+                    outputs=outputs
+                )
+                if generation_metadata is not None:
+                    if len(generation_metadata) != len(answers):
+                        raise ValueError(
+                            "Parsed generation metadata must have the same length as "
+                            "the parsed generations."
+                        )
+                    answers = [
+                        GenerationWithMetadata(answer, metadata)
+                        for answer, metadata in zip(
+                            answers, generation_metadata, strict=True
+                        )
+                    ]
             if cache_keys:
                 for res, cache in zip(answers, cache_keys):
                     if res is not None:
@@ -684,6 +707,8 @@ class TemplateAPI(TemplateLM):
         self, requests: List[Instance], disable_tqdm: bool = False
     ) -> List[str]:
         res = []
+        generation_metadata = []
+        request_instances = requests
 
         def _collate_gen(_requests):
             # sort by the length of the non-tokenized contexts
@@ -763,12 +788,20 @@ class TemplateAPI(TemplateLM):
                     generate=True,
                     gen_kwargs=copy.deepcopy(all_gen_kwargs[0]),
                 )
-                for generated_text, context in zip(
-                    self.parse_generations(
-                        outputs=outputs,
-                        contexts=contexts,
-                    ),
-                    contexts,
+                generated_texts = self.parse_generations(
+                    outputs=outputs,
+                    contexts=contexts,
+                )
+                chunk_metadata = self.parse_generation_metadata(outputs=outputs)
+                if chunk_metadata is None:
+                    chunk_metadata = [None] * len(generated_texts)
+                elif len(chunk_metadata) != len(generated_texts):
+                    raise ValueError(
+                        "Parsed generation metadata must have the same length as "
+                        "the parsed generations."
+                    )
+                for generated_text, metadata, context in zip(
+                    generated_texts, chunk_metadata, contexts
                 ):
                     # Always append to res to maintain the correct number of items
                     # even if generation failed (generated_text is None)
@@ -779,13 +812,19 @@ class TemplateAPI(TemplateLM):
                         res.append("")
                     else:
                         res.append(generated_text)
+                    generation_metadata.append(metadata)
 
                     # partial caching only for successful generations
                     if generated_text is not None and context is not None:
+                        cache_value = (
+                            GenerationWithMetadata(generated_text, metadata)
+                            if metadata is not None
+                            else generated_text
+                        )
                         self.cache_hook.add_partial(
                             "generate_until",
                             (context, all_gen_kwargs[0]),
-                            generated_text,
+                            cache_value,
                         )
                     pbar.update(1)
         else:
@@ -818,16 +857,28 @@ class TemplateAPI(TemplateLM):
                     )
                 )
                 # Convert None values to empty strings to maintain consistency
-                for r in results:
-                    if r is None:
+                for result in results:
+                    if isinstance(result, GenerationWithMetadata):
+                        generated_text, metadata = result
+                    else:
+                        generated_text, metadata = result, None
+                    if generated_text is None:
                         eval_logger.warning(
                             "API returned null content. Check reasoning_content field or generation limits."
                         )
                         res.append("")
                     else:
-                        res.append(r)
+                        res.append(generated_text)
+                    generation_metadata.append(metadata)
 
-        return re_ord.get_original(res)
+        res = re_ord.get_original(res)
+        generation_metadata = re_ord.get_original(generation_metadata)
+        for request, metadata in zip(
+            request_instances, generation_metadata, strict=True
+        ):
+            if metadata is not None:
+                request.generation_metadata.append(metadata)
+        return res
 
     def loglikelihood_rolling(
         self, requests: List[Instance], disable_tqdm: bool = False

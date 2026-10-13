@@ -1,0 +1,7 @@
+include: _default_edrac_template_yaml
+task: edrac_mor
+task_alias: "EDRAC - Moroccan"
+metadata:
+  version: 1.0
+  dialect: mor
+

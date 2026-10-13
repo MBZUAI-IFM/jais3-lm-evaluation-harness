@@ -39,6 +39,7 @@ MODEL_MAPPING = {
     "litellm": "lm_eval.models.litellm_llms:LiteLLMChatCompletion",
     "litellm-chat": "lm_eval.models.litellm_llms:LiteLLMChatCompletion",
     "litellm-chat-completions": "lm_eval.models.litellm_llms:LiteLLMChatCompletion",
+    "litellm-request-preview": "lm_eval.models.litellm_request_preview:LiteLLMRequestPreview",
     "local-chat-completions": "lm_eval.models.openai_completions:LocalChatCompletion",
     "local-completions": "lm_eval.models.openai_completions:LocalCompletionsAPI",
     "mamba_ssm": "lm_eval.models.mamba_lm:MambaLMWrapper",

@@ -4,7 +4,7 @@ import json
 import logging
 import os
 from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, NamedTuple, Optional, TypeVar
 
 from tqdm import tqdm
 
@@ -20,6 +20,13 @@ if TYPE_CHECKING:
 eval_logger = logging.getLogger(__name__)
 
 T = TypeVar("T", bound="LM")
+
+
+class GenerationWithMetadata(NamedTuple):
+    """An internal generation result paired with API response metadata."""
+
+    text: str | None
+    metadata: dict[str, Any]
 
 
 class LM(abc.ABC):
@@ -297,7 +304,15 @@ class CachingLM:
 
                     assert ob is not None
 
-                    res.append(ob)
+                    if attr == "generate_until" and isinstance(
+                        ob, GenerationWithMetadata
+                    ):
+                        req.generation_metadata.append(ob.metadata)
+                        res.append(ob.text)
+                    else:
+                        # Keep caches created before generation metadata support
+                        # backward-compatible. Their values are plain strings.
+                        res.append(ob)
                 else:
                     res.append(None)
                     remaining_reqs.append(req)
@@ -317,7 +332,13 @@ class CachingLM:
 
                 # caching
                 hsh = hash_args(attr, req.args)
-                self.dbdict[hsh] = r
+                cache_value = r
+                if attr == "generate_until" and req.generation_metadata:
+                    cache_value = GenerationWithMetadata(
+                        text=r,
+                        metadata=req.generation_metadata[-1],
+                    )
+                self.dbdict[hsh] = cache_value
             self.dbdict.commit()
 
             return res

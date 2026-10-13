@@ -1,0 +1,7 @@
+include: _default_edrac_template_yaml
+task: edrac_syr
+task_alias: "EDRAC - Syrian"
+metadata:
+  version: 1.0
+  dialect: syr
+

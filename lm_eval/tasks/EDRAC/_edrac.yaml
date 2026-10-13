@@ -1,0 +1,11 @@
+group: edrac
+group_alias: EDRAC
+task:
+  - edrac_egy
+  - edrac_mor
+  - edrac_ksa
+  - edrac_syr
+  - edrac_uae
+metadata:
+  version: 1.0
+

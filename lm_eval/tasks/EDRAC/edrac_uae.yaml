@@ -1,0 +1,7 @@
+include: _default_edrac_template_yaml
+task: edrac_uae
+task_alias: "EDRAC - Emirati"
+metadata:
+  version: 1.0
+  dialect: uae
+

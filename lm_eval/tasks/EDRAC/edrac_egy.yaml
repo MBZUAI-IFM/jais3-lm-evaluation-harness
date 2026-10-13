@@ -1,0 +1,7 @@
+include: _default_edrac_template_yaml
+task: edrac_egy
+task_alias: "EDRAC - Egyptian"
+metadata:
+  version: 1.0
+  dialect: egy
+

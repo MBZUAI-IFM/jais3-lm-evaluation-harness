@@ -1,0 +1,7 @@
+include: _default_edrac_template_yaml
+task: edrac_ksa
+task_alias: "EDRAC - Saudi"
+metadata:
+  version: 1.0
+  dialect: ksa
+
