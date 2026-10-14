@@ -17,10 +17,8 @@ from __future__ import annotations
 
 import copy
 import logging
-import math
 from typing import TYPE_CHECKING
 
-from lm_eval.api.model import GenerationWithMetadata
 from lm_eval.api.registry import register_model
 from lm_eval.models.openai_completions import LocalChatCompletion
 
@@ -48,94 +46,6 @@ class LiteLLMChatCompletion(LocalChatCompletion):
         bedrock/anthropic.claude-3-sonnet   # AWS Bedrock
         azure/my-deployment                 # Azure OpenAI
     """
-
-    @staticmethod
-    def _apply_anthropic_thinking_budget_percentage(
-        payload: dict, model: str, percentage: object
-    ) -> dict:
-        """Convert a relative Claude thinking budget into LiteLLM's nested form.
-
-        ``lm_eval --gen_kwargs`` only supports flat ``key=value`` arguments, so
-        callers cannot express Anthropic's nested ``thinking`` object there.
-        ``budget_tokens_percentage`` is therefore a harness-only convenience
-        argument. It is consumed here and never forwarded to LiteLLM.
-        """
-        if not model.startswith("anthropic/"):
-            raise ValueError(
-                "`budget_tokens_percentage` is only supported for models using "
-                "the `anthropic/` provider prefix."
-            )
-        if "thinking" in payload:
-            raise ValueError(
-                "Pass either `thinking` or `budget_tokens_percentage`, not both."
-            )
-
-        try:
-            percentage = float(percentage)
-        except (TypeError, ValueError):
-            raise ValueError(
-                "`budget_tokens_percentage` must be a number strictly between 0 and 1."
-            ) from None
-        if not math.isfinite(percentage) or not 0 < percentage < 1:
-            raise ValueError(
-                "`budget_tokens_percentage` must be strictly between 0 and 1."
-            )
-
-        max_tokens_value = payload.get(
-            "max_completion_tokens", payload.get("max_tokens")
-        )
-        if max_tokens_value is None:
-            raise ValueError(
-                "`budget_tokens_percentage` requires `max_gen_toks`, "
-                "`max_tokens`, or `max_completion_tokens`."
-            )
-        max_tokens = int(max_tokens_value)
-        if max_tokens <= 1024:
-            raise ValueError(
-                "Anthropic manual thinking requires `max_gen_toks` greater "
-                "than the minimum 1024-token thinking budget."
-            )
-        budget_tokens = max(1024, int(max_tokens * percentage))
-        budget_tokens = min(budget_tokens, max_tokens - 1)
-
-        # Do not let LiteLLM remap reasoning_effort to its own fixed budget.
-        payload.pop("reasoning_effort", None)
-        payload["thinking"] = {
-            "type": "enabled",
-            "budget_tokens": budget_tokens,
-        }
-        eval_logger.info(
-            "Using Anthropic manual thinking budget %d/%d tokens (%.2f%%).",
-            budget_tokens,
-            max_tokens,
-            percentage * 100,
-        )
-        return payload
-
-    def _create_payload(
-        self,
-        messages,
-        generate=False,
-        gen_kwargs=None,
-        seed=1234,
-        eos="<|endoftext|>",
-        **kwargs,
-    ) -> dict:
-        gen_kwargs = copy.deepcopy(gen_kwargs) or {}
-        budget_percentage = gen_kwargs.pop("budget_tokens_percentage", None)
-        payload = super()._create_payload(
-            messages,
-            generate=generate,
-            gen_kwargs=gen_kwargs,
-            seed=seed,
-            eos=eos,
-            **kwargs,
-        )
-        if budget_percentage is not None:
-            payload = self._apply_anthropic_thinking_budget_percentage(
-                payload, self.model, budget_percentage
-            )
-        return payload
 
     def __init__(
         self,
@@ -171,16 +81,16 @@ class LiteLLMChatCompletion(LocalChatCompletion):
         gen_kwargs=None,
         **kwargs,
     ) -> dict | None:
+        gen_kwargs = copy.deepcopy(gen_kwargs)
         try:
             payload = self._create_payload(
                 self.create_message(messages),
                 generate=generate,
-                gen_kwargs=copy.deepcopy(gen_kwargs),
+                gen_kwargs=gen_kwargs,
                 seed=self._seed,
                 eos=self.eos_string,
                 **kwargs,
             )
-            payload.setdefault("timeout", self.timeout)
             response = self._litellm.completion(**payload)
             return response.model_dump()
         except Exception as e:
@@ -188,20 +98,6 @@ class LiteLLMChatCompletion(LocalChatCompletion):
                 "LiteLLM completion failed for model %s: %s", self.model, e
             )
             raise
-
-    @staticmethod
-    def parse_generation_metadata(outputs, **kwargs) -> list[dict]:
-        """Keep the complete serialized LiteLLM response for each generation."""
-        if not isinstance(outputs, list):
-            outputs = [outputs]
-
-        metadata = []
-        for output in outputs:
-            # Stay aligned with LocalChatCompletion.parse_generations(), including
-            # its one-result fallback for blocked or malformed responses.
-            response_count = len(LocalChatCompletion.parse_generations(output))
-            metadata.extend([output] * response_count)
-        return metadata
 
     async def amodel_call(
         self,
@@ -214,20 +110,15 @@ class LiteLLMChatCompletion(LocalChatCompletion):
         ctxlens: list[int] | None = None,
         gen_kwargs: dict | None = None,
         **kwargs,
-    ) -> (
-        list[str]
-        | list[GenerationWithMetadata]
-        | list[tuple[float, bool]]
-        | None
-    ):
+    ) -> list[str] | list[tuple[float, bool]] | None:
+        gen_kwargs = copy.deepcopy(gen_kwargs)
         payload = self._create_payload(
             self.create_message(messages),
             generate=generate,
-            gen_kwargs=copy.deepcopy(gen_kwargs),
+            gen_kwargs=gen_kwargs,
             seed=self._seed,
             **kwargs,
         )
-        payload.setdefault("timeout", self.timeout)
         cache_method = "generate_until" if generate else "loglikelihood"
         acquired = await sem.acquire()
         try:
@@ -240,19 +131,6 @@ class LiteLLMChatCompletion(LocalChatCompletion):
                     outputs=outputs, tokens=messages, ctxlens=ctxlens
                 )
             )
-            if generate:
-                generation_metadata = self.parse_generation_metadata(outputs=outputs)
-                if len(generation_metadata) != len(answers):
-                    raise ValueError(
-                        "Parsed generation metadata must have the same length as "
-                        "the parsed generations."
-                    )
-                answers = [
-                    GenerationWithMetadata(answer, metadata)
-                    for answer, metadata in zip(
-                        answers, generation_metadata, strict=True
-                    )
-                ]
             if cache_keys:
                 for res, cache in zip(answers, cache_keys, strict=True):
                     if res is not None:
