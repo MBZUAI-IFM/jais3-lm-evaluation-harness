@@ -4,6 +4,7 @@ import gc
 import logging
 import os
 import re
+from functools import cached_property
 from importlib.metadata import version
 from importlib.util import find_spec
 from multiprocessing import Process, Queue
@@ -64,6 +65,17 @@ if TYPE_CHECKING:
     from lm_eval.api.instance import Instance
 
 eval_logger = logging.getLogger(__name__)
+
+
+def _get_tekkenizer(tokenizer: Any) -> Any | None:
+    """Return the mistral_common Tekkenizer behind a Mistral tokenizer, else None."""
+    inner = getattr(tokenizer, "tokenizer", None)
+    # vLLM's MistralTokenizer.tokenizer is the Tekkenizer itself; transformers'
+    # MistralCommonBackend wraps a mistral_common MistralTokenizer instead.
+    inner = getattr(getattr(inner, "instruct_tokenizer", None), "tokenizer", inner)
+    if hasattr(inner, "num_special_tokens") and hasattr(inner, "id_to_piece"):
+        return inner
+    return None
 
 
 def _vllm_mp_worker(
@@ -384,6 +396,40 @@ class VLLM(TemplateLM):
     def tokenizer_name(self) -> str:
         return self.tokenizer.name_or_path.replace("/", "__")
 
+    @cached_property
+    def _tekken_special_table(self) -> tuple[Any, dict[str, int], re.Pattern] | None:
+        """(tekkenizer, special-token string -> id, split regex) for mistral_common tokenizers.
+
+        mistral_common encodes control strings ("<s>", "[INST]", "[MODEL_SETTINGS]", ...)
+        as plain text, so chat-templated prompts must be split on them before encoding.
+        """
+        tekkenizer = _get_tekkenizer(self.tokenizer)
+        if tekkenizer is None:
+            return None
+        specials = {
+            tekkenizer.id_to_piece(i): i for i in range(tekkenizer.num_special_tokens)
+        }
+        pattern = re.compile(
+            "(" + "|".join(re.escape(s) for s in sorted(specials, key=len, reverse=True)) + ")"
+        )
+        return tekkenizer, specials, pattern
+
+    def _encode_with_special_tokens(self, text: str, add_bos: bool = False) -> list[int]:
+        """Encode text with a mistral_common tokenizer, mapping special-token strings to ids."""
+        tekkenizer, specials, pattern = self._tekken_special_table
+        ids: list[int] = []
+        for part in pattern.split(text):
+            if not part:
+                continue
+            special_id = specials.get(part)
+            if special_id is not None:
+                ids.append(special_id)
+            else:
+                ids.extend(tekkenizer.encode(part, bos=False, eos=False))
+        if add_bos and (not ids or ids[0] != tekkenizer.bos_id):
+            ids.insert(0, tekkenizer.bos_id)
+        return ids
+
     @overload
     def tok_encode(
         self, string: str, add_special_tokens=None, **kwargs
@@ -404,6 +450,20 @@ class VLLM(TemplateLM):
             return []
 
         _string: list[str] = [string] if isinstance(string, str) else string
+        if self._tekken_special_table is not None:
+            add_bos = _add_special_kwargs(add_special_tokens, self.add_bos_token).get(
+                "add_special_tokens", True
+            )
+            tekkenizer = self._tekken_special_table[0]
+            bos_str = tekkenizer.id_to_piece(tekkenizer.bos_id)
+            encoded = [
+                self._encode_with_special_tokens(
+                    s, add_bos=add_bos and not s.startswith(bos_str)
+                )
+                for s in _string
+            ]
+            return encoded[0] if isinstance(string, str) else encoded
+
         _bos_token = self.tokenizer.decode(self.prefix_token_id)
 
         special_tokens_kwargs = {
@@ -666,6 +726,8 @@ class VLLM(TemplateLM):
     def _encode_metadata_text(self, text: str) -> list[int]:
         if not text:
             return []
+        if self._tekken_special_table is not None:
+            return self._encode_with_special_tokens(text)
 
         try:
             token_ids = self.tokenizer(
