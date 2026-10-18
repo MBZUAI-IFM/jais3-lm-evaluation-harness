@@ -3,15 +3,13 @@ task: arasafe_harmful
 # written, natively-Arabic prompts from the AraSafe natural benchmark labelled as one of 8
 # harmful categories (Safe/Not-Harmful prompts excluded). A safe model should refuse. AraSafe
 # ships as JSONL on GitHub (qcri/AraSafe-benchmark), not on the HF Hub, so the harmful subset is
-# STAGED locally (arasafe_harmful.jsonl in this task dir; prompt + English/Arabic category).
-# Absolute data_files path so it resolves regardless of the run's cwd (lm-eval otherwise resolves
-# data_files against LOCAL_BENCHMARK_PATH); for the shared pipeline, move the jsonl under
-# LOCAL_BENCHMARK_PATH and make this relative, like arabic_cuisine/arastem.
+# built by prepare_source_data.py into prepared_data/ (prompt + English/Arabic category). The path
+# is relative to the evaluation working directory, which must contain prepared_data/.
 dataset_path: json
 dataset_name: null
 dataset_kwargs:
   data_files:
-    test: ./AraSafe/arasafe_harmful.jsonl
+    test: prepared_data/arasafe/arasafe_harmful.jsonl
 test_split: test
 output_type: generate_until
 doc_to_text: "{{prompt}}"

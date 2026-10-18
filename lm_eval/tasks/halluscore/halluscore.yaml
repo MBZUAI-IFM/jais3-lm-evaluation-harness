@@ -1,11 +1,11 @@
 task: halluscore
 # HalluScore: the first Arabic QA hallucination benchmark (arXiv:2605.17007;
-# github.com/aishaalansari57/HalluScore). 621 curated QA rows vendored locally as halluscore.jsonl
-# (the released xlsx has no HF mirror; its 17 precomputed model-response columns are dropped).
+# github.com/aishaalansari57/HalluScore). 621 curated QA rows, built from the released xlsx (no HF mirror;
+# its precomputed model-response columns are dropped) by prepare_source_data.py into prepared_data/.
 dataset_path: json
 dataset_kwargs:
   data_files:
-    test: HalluScore/halluscore.jsonl
+    test: prepared_data/halluscore/halluscore.jsonl
 test_split: test
 output_type: generate_until
 # Paper's unified zero-shot Arabic prompt (HalluScore run.py): answer realistically, briefly,

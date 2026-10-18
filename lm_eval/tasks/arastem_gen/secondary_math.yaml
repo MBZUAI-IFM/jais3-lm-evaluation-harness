@@ -1,5 +1,7 @@
-dataset_path: IFM/AraSTEM_verified
-dataset_name: secondary_math
+dataset_path: parquet
+dataset_kwargs:
+  data_files:
+    test: prepared_data/arastem/secondary_math.parquet
 include: _default_arastem_template_yaml
 # tag: arastem_secondary_math
 task: arastem_secondary_math_gen

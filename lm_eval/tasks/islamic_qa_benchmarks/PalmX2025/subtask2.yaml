@@ -1,5 +1,7 @@
-dataset_path: IFM/PalmX2025-Subtask2_verified
-dataset_name: default
+dataset_path: parquet
+dataset_kwargs:
+  data_files:
+    test: prepared_data/palmx/test.parquet
 task: islamic_qa_palmX2025_2
 test_split: test
 

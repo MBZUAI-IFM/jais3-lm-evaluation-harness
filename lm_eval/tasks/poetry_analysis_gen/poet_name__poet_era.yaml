@@ -1,4 +1,4 @@
-dataset_path: IFM/FannOrFlop-Poetry_verified
+dataset_path: IFM/FannOrFlop-MCQ_verified
 dataset_name: poet_name__poet_era
 include: _default_poetry_analysis_template_yaml
 tag: poet_name__poet_era_task_gen

@@ -1,4 +1,6 @@
-dataset_path: IFM/QASI_verified
-dataset_name: task1
+dataset_path: parquet
+dataset_kwargs:
+  data_files:
+    test: prepared_data/qias/task1.parquet
 task: islamic_qa_QASI_1
 include: _default_mcq_template_yaml

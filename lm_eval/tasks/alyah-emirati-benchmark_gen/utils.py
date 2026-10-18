@@ -10,7 +10,10 @@ def load_alyah_category(**kwargs):
     if category is None:
         raise ValueError("Alyah category must be provided in task metadata.")
 
-    dataset = datasets.load_dataset("IFM/alyah-emirati-benchmark_verified", "default")
+    # prepared by prepare_verified_data.py; relative to the evaluation working directory
+    dataset = datasets.load_dataset(
+        "parquet", data_files={"test": "prepared_data/alyah/test.parquet"}
+    )
     filtered_test = dataset["test"].filter(
         lambda doc: doc.get("category") == category
     )
